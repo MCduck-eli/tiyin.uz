@@ -1,57 +1,59 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { AlertCircle, TrendingDown } from "lucide-react";
 
-const categories = [
-    {
-        name: "Ovqatlanish",
-        spent: 1800000,
-        limit: 2000000,
-        color: "bg-emerald-500",
-    },
-    {
-        name: "Kiyim-kechak",
-        spent: 1200000,
-        limit: 1000000,
-        color: "bg-destructive",
-    }, // Limit oshgan
-    { name: "Transport", spent: 450000, limit: 600000, color: "bg-blue-500" },
-];
+interface CategoryPreviewProps {
+    totalBalance: number;
+    expenses: any[];
+    currencySymbol: string;
+}
 
-export function CategoryPreview() {
+export function CategoryPreview({
+    totalBalance,
+    expenses,
+    currencySymbol,
+}: CategoryPreviewProps) {
+    const totalSpent = expenses.reduce((sum, item) => sum + item.amount, 0);
+    const spendingRatio = totalSpent / (totalBalance || 1);
+    const isRunningLow = spendingRatio >= 0.8 && spendingRatio < 1;
+    const isOut = spendingRatio >= 1;
+
     return (
-        <div className="grid grid-cols-1 gap-4 w-full">
-            {categories.map((cat, i) => {
-                const percent = Math.min(100, (cat.spent / cat.limit) * 100);
-                const isOver = cat.spent > cat.limit;
-
-                return (
-                    <div
-                        key={i}
-                        className="p-4 rounded-2xl bg-muted/20 border border-border/50"
-                    >
-                        <div className="flex justify-between text-sm font-bold mb-2">
-                            <span>{cat.name}</span>
-                            <span className={isOver ? "text-destructive" : ""}>
-                                {cat.spent.toLocaleString()} /{" "}
-                                {cat.limit.toLocaleString()} so'm
-                            </span>
-                        </div>
-                        <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${percent}%` }}
-                                className={`h-full ${isOver ? "bg-destructive" : cat.color}`}
-                            />
-                        </div>
-                        {isOver && (
-                            <p className="text-[10px] text-destructive mt-1 font-bold animate-bounce">
-                                ⚠️ Diqqat! Limitdan oshib ketdingiz!
-                            </p>
-                        )}
+        <div className="space-y-6 w-full">
+            {isOut ? (
+                <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="p-4 rounded-2xl bg-destructive/10 border border-destructive/20 flex items-center gap-3 text-destructive"
+                >
+                    <AlertCircle className="w-6 h-6 shrink-0 animate-pulse" />
+                    <div>
+                        <p className="text-xs font-black uppercase tracking-tight">
+                            DIQQAT! PULINGIZ TUGADI
+                        </p>
+                        <p className="text-[10px] font-bold opacity-80 text-foreground">
+                            Siz limitdan chiqdingiz. Tejash rejimiga o'ting!
+                        </p>
                     </div>
-                );
-            })}
+                </motion.div>
+            ) : isRunningLow ? (
+                <motion.div
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="p-4 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-3 text-orange-600 dark:text-orange-400"
+                >
+                    <TrendingDown className="w-6 h-6 shrink-0" />
+                    <div>
+                        <p className="text-xs font-black uppercase tracking-tight">
+                            Mablag' kam qolmoqda
+                        </p>
+                        <p className="text-[10px] font-bold opacity-80 text-foreground">
+                            Balansingizning 80% dan ko'pi sarflandi.
+                        </p>
+                    </div>
+                </motion.div>
+            ) : null}
         </div>
     );
 }

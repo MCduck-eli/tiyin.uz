@@ -26,6 +26,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [fullName, setFullName] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -82,6 +83,9 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                 password,
                 options: {
                     emailRedirectTo: `${window.location.origin}/auth/callback`,
+                    data: {
+                        full_name: fullName,
+                    },
                 },
             });
 
@@ -114,6 +118,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                     setErrorMsg(null);
                     setSuccessMsg(null);
                     setView("auth");
+                    setFullName("");
                 }
                 onClose();
             }}
@@ -171,6 +176,24 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                             )}
 
                             <form onSubmit={handleAuth} className="space-y-4">
+                                {type === "register" && view === "auth" && (
+                                    <div className="space-y-2">
+                                        <Label htmlFor="fullName">
+                                            Ism va Familiya
+                                        </Label>
+                                        <Input
+                                            id="fullName"
+                                            type="text"
+                                            placeholder="Eldor Halikov"
+                                            className="rounded-xl bg-muted/50 border-none"
+                                            value={fullName}
+                                            onChange={(e) =>
+                                                setFullName(e.target.value)
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                )}
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
                                     <Input
