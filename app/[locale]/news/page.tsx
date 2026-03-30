@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface NewsItem {
     id: number;
@@ -24,6 +25,7 @@ interface NewsItem {
 }
 
 export default function AllNewsPage() {
+    const t = useTranslations("AllNewsPage");
     const [news, setNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -83,13 +85,13 @@ export default function AllNewsPage() {
                         className="group flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all font-bold text-[10px] uppercase tracking-[0.2em]"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                        Orqaga
+                        {t("back")}
                     </button>
 
                     <div className="flex items-center gap-2 bg-muted/50 px-4 py-2 rounded-xl border border-border">
                         <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                         <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-                            Jonli Yangiliklar
+                            {t("liveStatus")}
                         </span>
                     </div>
                 </div>
@@ -120,14 +122,13 @@ export default function AllNewsPage() {
 
                         <div className="w-full lg:w-112.5 space-y-8">
                             <p className="text-muted-foreground font-medium leading-relaxed text-sm border-l border-border pl-6">
-                                Professional darajadagi moliya tahlillari va
-                                real vaqt rejimidagi bozor o'zgarishlari.
+                                {t("headerDesc")}
                             </p>
                             <div className="relative group">
                                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                 <input
                                     type="text"
-                                    placeholder="Kalit so'z..."
+                                    placeholder={t("searchPlaceholder")}
                                     className="w-full bg-muted/30 border border-border rounded-2xl py-5 pl-14 pr-6 text-xs font-bold uppercase tracking-widest focus:outline-none focus:ring-1 focus:ring-primary/50 focus:bg-background transition-all"
                                     onChange={(e) =>
                                         setSearchTerm(e.target.value)
@@ -175,7 +176,7 @@ export default function AllNewsPage() {
                                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                                             {new Date(
                                                 item.datetime * 1000,
-                                            ).toLocaleDateString("uz-UZ", {
+                                            ).toLocaleDateString(undefined, {
                                                 day: "2-digit",
                                                 month: "short",
                                                 year: "numeric",
@@ -193,7 +194,7 @@ export default function AllNewsPage() {
 
                                     <div className="mt-auto flex items-center justify-between pt-6 border-t border-border">
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                                            Batafsil
+                                            {t("more")}
                                         </span>
                                         <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary group-hover:text-white dark:group-hover:text-black transition-all shadow-sm">
                                             <ChevronRight className="w-5 h-5" />
@@ -209,7 +210,7 @@ export default function AllNewsPage() {
                     <div className="py-40 text-center">
                         <Newspaper className="w-12 h-12 text-muted mx-auto mb-6 opacity-20" />
                         <h3 className="text-xl font-black uppercase tracking-widest text-muted-foreground">
-                            Ma'lumot topilmadi
+                            {t("noResults")}
                         </h3>
                     </div>
                 )}
@@ -220,13 +221,13 @@ export default function AllNewsPage() {
                     <div className="flex items-center gap-2">
                         <Zap className="w-5 h-5 text-primary fill-primary" />
                         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground">
-                            Tiyin Ekotizimi
+                            {t("ecosystem")}
                         </p>
                     </div>
                     <div className="flex gap-12 text-muted-foreground text-[10px] font-black uppercase tracking-widest">
                         <span>© 2026 Global Intelligence</span>
                         <span className="hover:text-primary transition-colors cursor-pointer">
-                            Maxfiylik
+                            {t("privacy")}
                         </span>
                     </div>
                 </div>

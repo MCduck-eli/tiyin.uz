@@ -1,0 +1,108 @@
+{
+    "HomePage": {
+        "loading": "Yuklanmoqda..."
+    },
+    "Navbar": {
+        "home": "Asosiy",
+        "dashboard": "Boshqaruv paneli",
+        "login": "Kirish",
+        "logout": "Chiqish",
+        "getStarted": "Ro'yxatdan o'tish"
+    },
+    "AuthModal": {
+        "forgotTitle": "Parolni tiklash",
+        "googleContinue": "Google orqali davom etish",
+        "or": "yoki",
+        "fullNameLabel": "To'liq ismingiz",
+        "emailLabel": "Email manzilingiz",
+        "passwordLabel": "Parol",
+        "forgotBtn": "Parolni unutdingizmi?",
+        "send": "Yuborish",
+        "loginSubmit": "Kirish",
+        "registerSubmit": "Ro'yxatdan o'tish",
+        "back": "Orqaga",
+        "gotIt": "Tushunarli",
+        "passwordWeak": "Parol juda oddiy!",
+        "resetSent": "Tiklash havolasi yuborildi",
+        "emailExists": "Bu email band",
+        "confirmSent": "Emailingizni tasdiqlang",
+        "invalidLogin": "Email yoki parol xato"
+    },
+    "Features": {
+        "title": "Bizning imkoniyatlar",
+        "description": "Moliya nazoratini biz bilan osonlashtiring",
+        "visualAnalytics": "Vizual tahlil",
+        "visualDesc": "Xarajatlaringizni grafiklar orqali kuzatib boring.",
+        "maxSecurity": "Maksimal xavfsizlik",
+        "securityDesc": "Ma'lumotlaringiz shifrlangan.",
+        "ultraFast": "Juda tezkor",
+        "fastDesc": "Tezkor ishlash kafolatlangan."
+    },
+    "InfoText": {
+        "badge": "Premium moliya ekotizimi",
+        "title": "Pulingizni <span>sanashni</span> o'rganing.",
+        "description": "Tiyin — murakkab jadvallardan charchaganlar uchun. Minimalistik dizayn, maksimal natija va aqlli tahlil.",
+        "openAccount": "Hisob ochish",
+        "howItWorks": "Qanday ishlaydi?"
+    },
+    "HowItWorks": {
+        "title": "Tiyin qanday ishlaydi?",
+        "subtitle": "Sizning pullaringiz — sizning nazoratingizda",
+        "step1Title": "Harajatni yozing",
+        "step1Desc": "Har bir xaridni (non, kiyim, taksi) sekundlar ichida qo'lda kiriting. Bu sizni ongli sarflashga o'rgatadi.",
+        "step2Title": "Avtomatik tahlil",
+        "step2Desc": "Tizim haftalik, oylik va yillik sarf-harajatlaringizni chiroyli grafiklarda hisoblab beradi.",
+        "step3Title": "Aqlli ogohlantirish",
+        "step3Desc": "Kategoriya uchun limit belgilang. Agar pulingiz tugab borayotgan bo'lsa, biz sizni ogohlantiramiz.",
+        "categoriesTitle": "Maxsus kategoriyalar",
+        "categories": {
+            "food": "Ovqatlanish",
+            "clothing": "Kiyim-kechak",
+            "entertainment": "Ko'ngilochar",
+            "debts": "Qarzlar",
+            "shopping": "Sotib olish",
+            "transport": "Transport"
+        },
+        "cta": "Tushunarli, boshladik!"
+    },
+    "ChartCard": {
+        "title": "Top Aksiyalar",
+        "viewAll": "Barcha aksiyalar",
+        "live": "Jonli"
+    },
+    "StocksPage": {
+        "loading": "Bozor yuklanmoqda...",
+        "back": "Orqaga qaytish",
+        "subtitle": "Amerika fond bozori tahlili",
+        "searchPlaceholder": "Aksiya qidirish...",
+        "currentPrice": "Joriy narx",
+        "change": "O'zgarish",
+        "high": "Kunlik eng yuqori",
+        "low": "Kunlik eng past",
+        "analyzeBtn": "TAHLIL QILISH",
+        "sectors": {
+            "technology": "Texnologiya",
+            "consumer": "Iste'mol",
+            "semiconductors": "Yarimo'tkazgichlar",
+            "automotive": "Avtomobil",
+            "financials": "Moliya",
+            "healthcare": "Sog'liqni saqlash"
+        }
+    },
+    "NewNews": {
+        "title": "Yangiliklar",
+        "subtitle": "Bozor tahlillari",
+        "viewAll": "Barcha yangiliklar",
+        "more": "Batafsil"
+    },
+    "AllNewsPage": {
+        "back": "Orqaga",
+        "liveStatus": "Jonli Yangiliklar",
+        "headerDesc": "Professional darajadagi moliya tahlillari va real vaqt rejimidagi bozor o'zgarishlari.",
+        "searchPlaceholder": "Kalit so'z...",
+        "more": "Batafsil",
+        "noResults": "Ma'lumot topilmadi",
+        "ecosystem": "Tiyin Ekotizimi",
+        "privacy": "Maxfiylik"
+    }
+}

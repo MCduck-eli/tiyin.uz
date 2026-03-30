@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Loader } from "@/components/ui/loader";
-import { HistoryTable } from "../(root)/components/history-table";
+import { HistoryTable } from "../[locale]/(root)/components/history-table";
 
 export default function ExpensesPage() {
     const [expenses, setExpenses] = useState<any[]>([]);

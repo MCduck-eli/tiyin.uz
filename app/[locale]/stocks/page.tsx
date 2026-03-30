@@ -15,25 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { AnalysisModal } from "@/components/stocks/analysis-modal";
-
-const API_KEY = process.env.NEXT_PUBLIC_FINHUB_API_KEY;
-
-const BIG_STOCKS = [
-    { symbol: "AAPL", name: "Apple Inc.", sector: "Technology" },
-    { symbol: "MSFT", name: "Microsoft", sector: "Technology" },
-    { symbol: "GOOGL", name: "Alphabet", sector: "Technology" },
-    { symbol: "AMZN", name: "Amazon.com", sector: "Consumer" },
-    { symbol: "NVDA", name: "Nvidia", sector: "Semiconductors" },
-    { symbol: "META", name: "Meta Platforms", sector: "Technology" },
-    { symbol: "TSLA", name: "Tesla Inc.", sector: "Automotive" },
-    { symbol: "BRK.B", name: "Berkshire", sector: "Financials" },
-    { symbol: "V", name: "Visa Inc.", sector: "Financials" },
-    { symbol: "JPM", name: "JPMorgan", sector: "Financials" },
-    { symbol: "LLY", name: "Eli Lilly", sector: "Healthcare" },
-    { symbol: "UNH", name: "UnitedHealth", sector: "Healthcare" },
-];
+import { useTranslations } from "next-intl";
+import { fetchFullMarket } from "./data-stock";
 
 export default function StocksPage() {
+    const t = useTranslations("StocksPage");
     const [stocks, setStocks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -41,34 +27,8 @@ export default function StocksPage() {
     const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
     const router = useRouter();
 
-    const fetchFullMarket = async () => {
-        try {
-            const results = await Promise.all(
-                BIG_STOCKS.map(async (item) => {
-                    const res = await fetch(
-                        `https://finnhub.io/api/v1/quote?symbol=${item.symbol}&token=${API_KEY}`,
-                    );
-                    const data = await res.json();
-                    return {
-                        ...item,
-                        price: data.c ?? 0,
-                        change: data.d ?? 0,
-                        percent: data.dp ?? 0,
-                        high: data.h ?? 0,
-                        low: data.l ?? 0,
-                        up: (data.dp ?? 0) >= 0,
-                    };
-                }),
-            );
-            setStocks(results);
-            setLoading(false);
-        } catch (error) {
-            console.error("Market fetch error:", error);
-        }
-    };
-
     useEffect(() => {
-        fetchFullMarket();
+        fetchFullMarket(setStocks, setLoading);
         const interval = setInterval(fetchFullMarket, 60000);
         return () => clearInterval(interval);
     }, []);
@@ -90,7 +50,7 @@ export default function StocksPage() {
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="w-10 h-10 animate-spin text-primary opacity-50" />
                     <p className="text-xs font-black uppercase tracking-widest opacity-40">
-                        Bozor yuklanmoqda...
+                        {t("loading")}
                     </p>
                 </div>
             </div>
@@ -105,20 +65,20 @@ export default function StocksPage() {
                         onClick={() => router.back()}
                         className="p-0 hover:bg-transparent text-muted-foreground hover:text-foreground gap-2 transition-colors mb-2"
                     >
-                        <ArrowLeft size={18} /> Orqaga qaytish
+                        <ArrowLeft size={18} /> {t("back")}
                     </Button>
                     <h1 className="text-5xl font-black tracking-tighter uppercase italic">
                         U.S. Market <span className="text-primary">Live</span>
                     </h1>
                     <p className="text-sm font-bold opacity-50 uppercase tracking-widest">
-                        Amerika fond bozori tahlili
+                        {t("subtitle")}
                     </p>
                 </div>
 
                 <div className="relative w-full md:w-80">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30" />
                     <Input
-                        placeholder="Aksiya qidirish..."
+                        placeholder={t("searchPlaceholder")}
                         className="pl-11 h-12 rounded-2xl bg-card/50 border-border/50 focus:border-primary/50 transition-all font-bold"
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -142,7 +102,7 @@ export default function StocksPage() {
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2">
                                     <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-primary/10 text-primary uppercase">
-                                        {stock.sector}
+                                        {t(`sectors.${stock.sector}`)}
                                     </span>
                                 </div>
                                 <h3 className="text-3xl font-black tracking-tighter leading-none mt-2 uppercase italic">
@@ -167,7 +127,7 @@ export default function StocksPage() {
                             <div className="flex items-end justify-between">
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black uppercase opacity-40 tracking-widest">
-                                        Joriy narx
+                                        {t("currentPrice")}
                                     </p>
                                     <h4 className="text-4xl font-black tabular-nums tracking-tighter">
                                         $
@@ -184,7 +144,7 @@ export default function StocksPage() {
                                         {stock.percent.toFixed(2)}%
                                     </p>
                                     <p className="text-[10px] font-bold uppercase opacity-60">
-                                        O'zgarish
+                                        {t("change")}
                                     </p>
                                 </div>
                             </div>
@@ -192,7 +152,7 @@ export default function StocksPage() {
                             <div className="grid grid-cols-2 gap-4 pt-6 border-t border-border/30">
                                 <div className="space-y-1">
                                     <p className="text-[9px] font-black uppercase opacity-40">
-                                        Kunlik eng yuqori
+                                        {t("high")}
                                     </p>
                                     <p className="font-mono font-bold text-sm">
                                         ${stock.high.toFixed(2)}
@@ -200,7 +160,7 @@ export default function StocksPage() {
                                 </div>
                                 <div className="space-y-1 text-right">
                                     <p className="text-[9px] font-black uppercase opacity-40">
-                                        Kunlik eng past
+                                        {t("low")}
                                     </p>
                                     <p className="font-mono font-bold text-sm">
                                         ${stock.low.toFixed(2)}
@@ -213,7 +173,7 @@ export default function StocksPage() {
                             onClick={() => handleAnalyze(stock.symbol)}
                             className="w-full mt-8 rounded-2xl h-12 font-black gap-2 group-hover:bg-primary transition-all"
                         >
-                            TAHLIL QILISH <BarChart3 size={16} />
+                            {t("analyzeBtn")} <BarChart3 size={16} />
                         </Button>
                     </motion.div>
                 ))}

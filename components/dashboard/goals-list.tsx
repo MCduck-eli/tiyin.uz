@@ -2,13 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import {
-    Trash2,
-    Trophy,
-    TrendingUp,
-    AlertCircle,
-    Sparkles,
-} from "lucide-react";
+import { Trash2, Trophy, TrendingUp, AlertCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface Goal {
@@ -42,8 +36,9 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                 const actualExp = goal.actual_daily_spending || 0;
                 const target = goal.target_price || 1;
 
-                const expectedDailySaving = income / 30 - expectedExp;
-                const actualDailySaving = income / 30 - actualExp;
+                const dailyIncome = income / 30;
+                const expectedDailySaving = dailyIncome - expectedExp;
+                const actualDailySaving = dailyIncome - actualExp;
 
                 const daysPassed = Math.max(
                     1,
@@ -54,18 +49,13 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                     ),
                 );
 
-                const totalCalculatedSaved = Math.max(
-                    0,
-                    actualDailySaving * daysPassed,
-                );
+                const totalCalculatedSaved = actualDailySaving * daysPassed;
 
-                const progress = Math.min(
-                    100,
-                    Math.max(
-                        0,
-                        Math.round((totalCalculatedSaved / target) * 100),
-                    ) || 0,
-                );
+                const progress =
+                    Math.min(
+                        100,
+                        Math.max(0, (totalCalculatedSaved / target) * 100),
+                    ) || 0;
 
                 const isLosingGround = actualDailySaving < expectedDailySaving;
 
@@ -110,10 +100,6 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                             <div className="space-y-2">
                                 <div className="flex justify-between items-end text-[10px] font-black uppercase">
                                     <span className="flex items-center gap-1 opacity-60">
-                                        <Sparkles
-                                            size={12}
-                                            className="text-primary"
-                                        />{" "}
                                         AI Progress
                                     </span>
                                     <span
@@ -123,12 +109,12 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                                                 : "text-primary"
                                         }
                                     >
-                                        {progress}%
+                                        {progress.toFixed(1)}%
                                     </span>
                                 </div>
                                 <Progress
                                     value={progress}
-                                    className={`h-3 ${isLosingGround ? "[&>div]:bg-destructive" : ""}`}
+                                    className={`h-3 ${isLosingGround ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"}`}
                                 />
                             </div>
                             <div
@@ -152,14 +138,14 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                                         </p>
                                         <p className="text-sm font-bold italic">
                                             {isLosingGround
-                                                ? "Xarajat ko'p - Progress pasaymoqda"
-                                                : "Tejamkorlik - Progress o'smoqda"}
+                                                ? "Xarajat ko'p - Rejadan uzoqlashish"
+                                                : "Tejamkorlik - Maqsadga yaqinlashish"}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[10px] font-black opacity-40 uppercase">
-                                        Balans
+                                        Kunlik Balans
                                     </p>
                                     <p
                                         className={`text-sm font-black ${actualDailySaving >= 0 ? "text-emerald-500" : "text-destructive"}`}
@@ -175,7 +161,7 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                                     Maqsad: {target.toLocaleString()} {currency}
                                 </span>
                                 <span>
-                                    Yig'ildi:{" "}
+                                    Virtual Jamg'arma:{" "}
                                     {totalCalculatedSaved.toLocaleString(
                                         undefined,
                                         { maximumFractionDigits: 0 },

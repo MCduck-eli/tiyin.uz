@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, TrendingUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const API_KEY = process.env.NEXT_PUBLIC_FINHUB_API_KEY;
-const SYMBOLS = ["AAPL", "TSLA", "MSFT", "NVDA"];
+import { useTranslations } from "next-intl";
+import { fetchStockData } from "./chart-base";
 
 interface IStock {
     id: string;
@@ -19,66 +18,13 @@ interface IStock {
 }
 
 export default function ChartCard() {
+    const t = useTranslations("ChartCard");
     const [stocks, setStocks] = useState<IStock[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
-    const fetchStockData = async () => {
-        try {
-            const results = await Promise.all(
-                SYMBOLS.map(async (symbol) => {
-                    const quoteRes = await fetch(
-                        `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${API_KEY}`,
-                    );
-                    const quoteData = await quoteRes.json();
-                    const to = Math.floor(Date.now() / 1000);
-                    const from = to - 86400;
-                    const candleRes = await fetch(
-                        `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=60&from=${from}&to=${to}&token=${API_KEY}`,
-                    );
-                    const candleData = await candleRes.json();
-
-                    let chartBars: number[] = [];
-                    if (candleData.c) {
-                        const min = Math.min(...candleData.c);
-                        const max = Math.max(...candleData.c);
-                        chartBars = candleData.c.map(
-                            (val: number) => ((val - min) / (max - min)) * 100,
-                        );
-                    }
-
-                    return {
-                        id: symbol,
-                        name:
-                            symbol === "AAPL"
-                                ? "Apple Inc."
-                                : symbol === "TSLA"
-                                  ? "Tesla Motors"
-                                  : symbol === "MSFT"
-                                    ? "Microsoft"
-                                    : "Nvidia Corp",
-                        price: quoteData.c,
-                        color:
-                            quoteData.dp >= 0
-                                ? "text-emerald-500"
-                                : "text-destructive",
-                        chart:
-                            chartBars.length > 0
-                                ? chartBars.slice(-15)
-                                : [40, 50, 60, 45, 70, 80],
-                    };
-                }),
-            );
-            setStocks(results);
-            setIsLoading(false);
-        } catch (error) {
-            console.error("API Error:", error);
-            setIsLoading(false);
-        }
-    };
-
     useEffect(() => {
-        fetchStockData();
+        fetchStockData(setStocks, setIsLoading);
         const timer = setInterval(fetchStockData, 60000);
         return () => clearInterval(timer);
     }, []);
@@ -98,7 +44,7 @@ export default function ChartCard() {
                         <TrendingUp className="w-5 h-5 text-primary" />
                     </div>
                     <h3 className="text-xl font-black uppercase italic tracking-tight">
-                        Top Aksiyalar
+                        {t("title")}
                     </h3>
                 </div>
                 <Link href={"/stocks"}>
@@ -106,7 +52,7 @@ export default function ChartCard() {
                         variant="outline"
                         className="rounded-full border-border/50 bg-card/50 font-bold gap-2 hover:bg-accent"
                     >
-                        Barcha aksiyalar <ArrowUpRight size={16} />
+                        {t("viewAll")} <ArrowUpRight size={16} />
                     </Button>
                 </Link>
             </div>
@@ -141,7 +87,7 @@ export default function ChartCard() {
                                         : "text-destructive"
                                 }`}
                             >
-                                ● Live
+                                ● {t("live")}
                             </div>
                         </div>
 

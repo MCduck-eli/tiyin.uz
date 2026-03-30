@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import FirsInfo from "../components/first-info";
-import FirstDashboard from "../components/first-dashboard";
+import { useTranslations } from "next-intl";
+import FirsInfo from "./components/first-info";
+import FirstDashboard from "./components/first-dashboard";
 
 export default function Home() {
+    const t = useTranslations("HomePage");
+
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [liveStocks, setLiveStocks] = useState([
@@ -41,15 +44,19 @@ export default function Home() {
 
     useEffect(() => {
         const checkUser = async () => {
-            const { data } = await supabase.auth.getUser();
-            setUser(data.user);
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
+            setUser(session?.user ?? null);
             setLoading(false);
         };
+
         checkUser();
 
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (_event, session) => {
                 setUser(session?.user ?? null);
+                setLoading(false);
             },
         );
 
@@ -76,12 +83,16 @@ export default function Home() {
         }, 3000);
 
         return () => {
-            authListener.subscription.unsubscribe();
+            if (authListener?.subscription) {
+                authListener.subscription.unsubscribe();
+            }
             clearInterval(interval);
         };
     }, []);
 
-    if (loading) return null;
+    if (loading) {
+        return <div className="min-h-screen bg-background" />;
+    }
 
     if (!user) {
         return <FirsInfo liveStocks={liveStocks} />;

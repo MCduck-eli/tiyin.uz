@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useTranslation } from "./context/language-context";
+import { useTranslations } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import PasswordStrength from "./password-strength";
@@ -23,7 +23,9 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
-    const { t } = useTranslation();
+    const t = useTranslations("AuthModal");
+    const tNav = useTranslations("Navbar");
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [fullName, setFullName] = useState("");
@@ -60,9 +62,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
             view === "auth" &&
             !isPasswordStrong(password)
         ) {
-            setErrorMsg(
-                "Parol juda oddiy. Iltimos, barcha talablarga javob bering.",
-            );
+            setErrorMsg(t("passwordWeak"));
             return;
         }
 
@@ -73,10 +73,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                 redirectTo: `${window.location.origin}/reset-password`,
             });
             if (error) setErrorMsg(error.message);
-            else
-                setSuccessMsg(
-                    "Parolni tiklash havolasi emailingizga yuborildi!",
-                );
+            else setSuccessMsg(t("resetSent"));
         } else if (type === "register") {
             const { data, error } = await supabase.auth.signUp({
                 email,
@@ -92,9 +89,9 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
             if (error) {
                 setErrorMsg(error.message);
             } else if (data.user && data.user.identities?.length === 0) {
-                setErrorMsg("Bu email allaqachon ro'yxatdan o'tgan");
+                setErrorMsg(t("emailExists"));
             } else {
-                setSuccessMsg("Tasdiqlash xati emailingizga yuborildi!");
+                setSuccessMsg(t("confirmSent"));
             }
         } else {
             const { error } = await supabase.auth.signInWithPassword({
@@ -102,7 +99,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                 password,
             });
             if (error) {
-                setErrorMsg("Email yoki parol noto'g'ri");
+                setErrorMsg(t("invalidLogin"));
             } else {
                 window.location.reload();
             }
@@ -127,10 +124,10 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold tracking-tight text-center">
                         {view === "forgot"
-                            ? "Parolni tiklash"
+                            ? t("forgotTitle")
                             : type === "login"
-                              ? t.nav.login
-                              : t.nav.getStarted}
+                              ? tNav("login")
+                              : tNav("getStarted")}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -158,7 +155,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     className="w-full rounded-xl h-11 border-border bg-background/50 hover:bg-muted font-medium flex items-center gap-2"
                                 >
                                     <FcGoogle className="w-5 h-5" />
-                                    Google orqali davom etish
+                                    {t("googleContinue")}
                                 </Button>
                             )}
 
@@ -169,7 +166,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
                                         <span className="bg-transparent px-2 text-muted-foreground">
-                                            Yoki
+                                            {t("or")}
                                         </span>
                                     </div>
                                 </div>
@@ -179,7 +176,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                 {type === "register" && view === "auth" && (
                                     <div className="space-y-2">
                                         <Label htmlFor="fullName">
-                                            Ism va Familiya
+                                            {t("fullNameLabel")}
                                         </Label>
                                         <Input
                                             id="fullName"
@@ -195,7 +192,9 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     </div>
                                 )}
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
+                                    <Label htmlFor="email">
+                                        {t("emailLabel")}
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -211,7 +210,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
                                             <Label htmlFor="password">
-                                                Password
+                                                {t("passwordLabel")}
                                             </Label>
                                             <button
                                                 type="button"
@@ -220,7 +219,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                                 }
                                                 className="text-xs text-primary hover:underline"
                                             >
-                                                Unutdingizmi?
+                                                {t("forgotBtn")}
                                             </button>
                                         </div>
                                         <Input
@@ -248,10 +247,10 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     {loading
                                         ? "..."
                                         : view === "forgot"
-                                          ? "Yuborish"
+                                          ? t("send")
                                           : type === "login"
-                                            ? "Kirish"
-                                            : "Ro'yxatdan o'tish"}
+                                            ? t("loginSubmit")
+                                            : t("registerSubmit")}
                                 </Button>
                                 {view === "forgot" && (
                                     <Button
@@ -260,7 +259,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                         onClick={() => setView("auth")}
                                         className="w-full text-xs"
                                     >
-                                        Orqaga qaytish
+                                        {t("back")}
                                     </Button>
                                 )}
                             </form>
@@ -272,7 +271,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                             onClick={onClose}
                             className="w-full rounded-xl h-11"
                         >
-                            Tushunarli
+                            {t("gotIt")}
                         </Button>
                     )}
                 </div>

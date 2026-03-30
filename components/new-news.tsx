@@ -3,6 +3,7 @@
 import { ArrowRight, Clock, ExternalLink, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface NewsItem {
     id: string | number;
@@ -18,6 +19,8 @@ interface NewProps {
 }
 
 export default function NewNews({ newsLoading, news }: NewProps) {
+    const t = useTranslations("NewNews");
+
     return (
         <section className="w-full max-w-7xl px-6 mt-24">
             <div className="flex items-end justify-between mb-8 pb-4 border-b border-border/40">
@@ -27,17 +30,17 @@ export default function NewNews({ newsLoading, news }: NewProps) {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black tracking-tighter uppercase leading-none text-foreground">
-                            Yangiliklar
+                            {t("title")}
                         </h2>
                         <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1.5">
-                            Market Insights
+                            {t("subtitle")}
                         </p>
                     </div>
                 </div>
                 <Link href="/news" className="group">
                     <div className="flex items-center gap-2.5 px-4 py-2 rounded-full hover:bg-muted transition-all duration-300 border border-transparent hover:border-border/50">
                         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
-                            Barcha yangiliklar
+                            {t("viewAll")}
                         </span>
                         <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
                             <ArrowRight className="w-3 h-3" />
@@ -51,7 +54,7 @@ export default function NewNews({ newsLoading, news }: NewProps) {
                     ? Array.from({ length: 4 }).map((_, i) => (
                           <div
                               key={i}
-                              className="h-[320px] rounded-[32px] bg-muted/20 animate-pulse border border-border/50"
+                              className="h-80 rounded-[32px] bg-muted/20 animate-pulse border border-border/50"
                           />
                       ))
                     : news?.map((item: NewsItem) => (
@@ -64,7 +67,7 @@ export default function NewNews({ newsLoading, news }: NewProps) {
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.4 }}
-                              className="group relative flex flex-col rounded-[32px] bg-card/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all shadow-sm overflow-hidden min-h-[320px]"
+                              className="group relative flex flex-col rounded-[32px] bg-card/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all shadow-sm overflow-hidden min-h-80"
                           >
                               <div className="relative h-32 w-full overflow-hidden bg-muted">
                                   <img
@@ -82,7 +85,7 @@ export default function NewNews({ newsLoading, news }: NewProps) {
                                           <Clock className="w-3 h-3 text-primary" />
                                           {new Date(
                                               item.datetime * 1000,
-                                          ).toLocaleTimeString("uz-UZ", {
+                                          ).toLocaleTimeString(undefined, {
                                               hour: "2-digit",
                                               minute: "2-digit",
                                           })}
@@ -93,7 +96,7 @@ export default function NewNews({ newsLoading, news }: NewProps) {
                                   </div>
                                   <div className="pt-4 flex items-center justify-between border-t border-border/20">
                                       <span className="text-[9px] font-black uppercase text-primary tracking-widest">
-                                          Batafsil
+                                          {t("more")}
                                       </span>
                                       <ExternalLink className="w-3 h-3 opacity-30 group-hover:opacity-100 transition-opacity" />
                                   </div>

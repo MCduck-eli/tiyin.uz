@@ -196,21 +196,25 @@ export function HistoryTable({
                                             className="group hover:bg-primary/[0.01] transition-colors"
                                         >
                                             <td className="p-4">
-                                                <p className="text-xs font-bold">
+                                                <p className="text-xs font-black tabular-nums">
                                                     {new Date(
                                                         exp.date,
                                                     ).toLocaleDateString(
                                                         "uz-UZ",
                                                         {
                                                             day: "2-digit",
-                                                            month: "short",
+                                                            month: "2-digit",
+                                                            year: "numeric",
                                                         },
                                                     )}
                                                 </p>
-                                                <p className="text-[9px] text-muted-foreground font-medium">
+                                                <p className="text-[9px] text-muted-foreground font-black uppercase">
                                                     {new Date(
                                                         exp.date,
-                                                    ).getFullYear()}
+                                                    ).toLocaleDateString(
+                                                        "uz-UZ",
+                                                        { weekday: "short" },
+                                                    )}
                                                 </p>
                                             </td>
                                             <td className="p-4">

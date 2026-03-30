@@ -1,0 +1,108 @@
+{
+    "HomePage": {
+        "loading": "Loading..."
+    },
+    "Navbar": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "login": "Login",
+        "logout": "Logout",
+        "getStarted": "Get Started"
+    },
+    "AuthModal": {
+        "forgotTitle": "Reset Password",
+        "googleContinue": "Continue with Google",
+        "or": "or",
+        "fullNameLabel": "Full Name",
+        "emailLabel": "Email Address",
+        "passwordLabel": "Password",
+        "forgotBtn": "Forgot password?",
+        "send": "Send",
+        "loginSubmit": "Login",
+        "registerSubmit": "Sign Up",
+        "back": "Back",
+        "gotIt": "Got it",
+        "passwordWeak": "Password is too weak!",
+        "resetSent": "Reset link sent to your email",
+        "emailExists": "Email already exists",
+        "confirmSent": "Check your email to confirm",
+        "invalidLogin": "Invalid email or password"
+    },
+    "Features": {
+        "title": "Our Features",
+        "description": "Simplify your financial control with us",
+        "visualAnalytics": "Visual Analytics",
+        "visualDesc": "Track your expenses through beautiful charts.",
+        "maxSecurity": "Maximum Security",
+        "securityDesc": "Your data is encrypted and secure.",
+        "ultraFast": "Ultra Fast",
+        "fastDesc": "Works instantly without delays."
+    },
+    "InfoText": {
+        "badge": "Premium financial ecosystem",
+        "title": "Learn how to <span>count</span> your money.",
+        "description": "Tiyin — for those tired of complex spreadsheets. Minimalist design, maximum results, and smart analytics.",
+        "openAccount": "Open account",
+        "howItWorks": "How it works?"
+    },
+    "HowItWorks": {
+        "title": "How Tiyin works?",
+        "subtitle": "Your money — under your control",
+        "step1Title": "Record expenses",
+        "step1Desc": "Enter every purchase (bread, clothes, taxi) manually in seconds. This teaches you mindful spending.",
+        "step2Title": "Auto-analysis",
+        "step2Desc": "The system calculates your weekly, monthly, and yearly expenses in beautiful charts.",
+        "step3Title": "Smart alerts",
+        "step3Desc": "Set a limit for a category. If you're running out of money, we'll warn you.",
+        "categoriesTitle": "Special categories",
+        "categories": {
+            "food": "Food",
+            "clothing": "Clothing",
+            "entertainment": "Entertainment",
+            "debts": "Debts",
+            "shopping": "Shopping",
+            "transport": "Transport"
+        },
+        "cta": "Got it, let's start!"
+    },
+    "ChartCard": {
+        "title": "Top Stocks",
+        "viewAll": "All stocks",
+        "live": "Live"
+    },
+    "StocksPage": {
+        "loading": "Loading market...",
+        "back": "Go back",
+        "subtitle": "U.S. stock market analysis",
+        "searchPlaceholder": "Search stocks...",
+        "currentPrice": "Current price",
+        "change": "Change",
+        "high": "Daily high",
+        "low": "Daily low",
+        "analyzeBtn": "ANALYZE NOW",
+        "sectors": {
+            "technology": "Technology",
+            "consumer": "Consumer",
+            "semiconductors": "Semiconductors",
+            "automotive": "Automotive",
+            "financials": "Financials",
+            "healthcare": "Healthcare"
+        }
+    },
+    "NewNews": {
+        "title": "News",
+        "subtitle": "Market Insights",
+        "viewAll": "All news",
+        "more": "Read more"
+    },
+    "AllNewsPage": {
+        "back": "Back",
+        "liveStatus": "Live News",
+        "headerDesc": "Professional-grade financial analytics and real-time market insights.",
+        "searchPlaceholder": "Keyword...",
+        "more": "Read more",
+        "noResults": "No results found",
+        "ecosystem": "Tiyin Ecosystem",
+        "privacy": "Privacy"
+    }
+}

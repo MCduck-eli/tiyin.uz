@@ -5,7 +5,7 @@ import { Fingerprint } from "lucide-react";
 
 export function Loader() {
     return (
-        <div className="fixed inset-0 z-300 flex flex-col items-center justify-center bg-background/80 backdrop-blur-xl">
+        <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-background">
             <div className="relative flex items-center justify-center">
                 <motion.div
                     className="w-24 h-24 rounded-[32px] border-[3px] border-primary/10 border-t-primary/60"

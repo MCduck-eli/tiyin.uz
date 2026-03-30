@@ -1,13 +1,9 @@
-"use client";
-
-import { Calendar, Plus, TrendingUp, Wallet, Zap } from "lucide-react";
+import { Calendar, TrendingUp, Wallet, Zap } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { AddExpenseModal } from "@/components/dashboard/add-expense-modal";
 import { CreateAccountModal } from "@/components/dashboard/create-account-modal";
 import { supabase } from "@/lib/supabase";
 import { CategoryPreview } from "@/components/dashboard/category-preview";
-import { HistoryTable } from "./history-table";
-import { Loader } from "@/components/ui/loader";
 import DashboardCard from "./dashboard-card";
 import { ExpenseChart } from "./dashboard-chart";
 import AllCost from "./all-cost";
@@ -33,6 +29,7 @@ export default function FirstDashboard({
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isSetupOpen, setIsSetupOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isMounted, setIsMounted] = useState(false);
     const [view, setView] = useState<"dashboard" | "history">("dashboard");
     const [userStats, setUserStats] = useState({
         balance: propInitialBalance,
@@ -47,28 +44,29 @@ export default function FirstDashboard({
             data: { user },
         } = await supabase.auth.getUser();
         if (!user) return;
-
         const { data } = await supabase
             .from("goals")
             .select("*")
             .order("created_at", { ascending: false });
-
         if (data) setGoals(data);
     };
 
     useEffect(() => {
+        setIsMounted(true);
         const fetchDashboardData = async () => {
             const {
                 data: { user },
             } = await supabase.auth.getUser();
-            if (!user) return;
+            if (!user) {
+                setIsLoading(false);
+                return;
+            }
 
             const { data: profile } = await supabase
                 .from("profiles")
                 .select("*")
                 .eq("id", user.id)
                 .single();
-
             if (profile) {
                 setUserStats({
                     balance: profile.initial_balance,
@@ -85,61 +83,12 @@ export default function FirstDashboard({
                 .select("*")
                 .eq("user_id", user.id)
                 .order("date", { ascending: false });
-
             if (expenses) setLocalExpenses(expenses);
             await fetchGoals();
             setIsLoading(false);
         };
         fetchDashboardData();
     }, []);
-
-    const handleDeleteExpense = async (id: string) => {
-        const { error } = await supabase.from("expenses").delete().eq("id", id);
-        if (!error) setLocalExpenses((prev) => prev.filter((e) => e.id !== id));
-    };
-
-    const handleAddExpense = async (newExpense: any) => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data, error } = await supabase
-            .from("expenses")
-            .insert([
-                {
-                    user_id: user.id,
-                    amount: newExpense.amount,
-                    category: newExpense.category,
-                    note: newExpense.note,
-                    date: new Date().toISOString(),
-                },
-            ])
-            .select()
-            .single();
-
-        if (!error && data) setLocalExpenses((prev) => [data, ...prev]);
-    };
-
-    const handleSetup = async (data: { balance: number; currency: string }) => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { error } = await supabase.from("profiles").upsert({
-            id: user.id,
-            initial_balance: data.balance,
-            currency: data.currency,
-            has_setup: true,
-            updated_at: new Date().toISOString(),
-        });
-
-        if (!error) {
-            setUserStats(data);
-            setIsSetupOpen(false);
-        }
-    };
 
     const getCurrencySymbol = (code: string) => {
         switch (code) {
@@ -159,16 +108,13 @@ export default function FirstDashboard({
             now.getMonth() + 1,
             0,
         ).getDate();
-        const days = Array.from({ length: daysInMonth }, (_, i) => {
-            const day = i + 1;
-            return {
-                date: day.toString(),
-                fullDate: new Date(now.getFullYear(), now.getMonth(), day)
-                    .toISOString()
-                    .split("T")[0],
-                amount: 0,
-            };
-        });
+        const days = Array.from({ length: daysInMonth }, (_, i) => ({
+            date: (i + 1).toString(),
+            fullDate: new Date(now.getFullYear(), now.getMonth(), i + 1)
+                .toISOString()
+                .split("T")[0],
+            amount: 0,
+        }));
         localExpenses.forEach((exp) => {
             const expDate = new Date(exp.date).toISOString().split("T")[0];
             const dayEntry = days.find((d) => d.fullDate === expDate);
@@ -237,21 +183,7 @@ export default function FirstDashboard({
         },
     ];
 
-    if (isLoading) return <Loader />;
-
-    if (view === "history") {
-        return (
-            <main className="flex min-h-screen flex-col px-6 max-w-7xl mx-auto w-full pt-5 ">
-                <AICounselor />
-                <HistoryTable
-                    expenses={localExpenses}
-                    currencySymbol={getCurrencySymbol(userStats.currency)}
-                    onDelete={handleDeleteExpense}
-                    onBack={() => setView("dashboard")}
-                />
-            </main>
-        );
-    }
+    if (!isMounted) return null;
 
     return (
         <main className="flex min-h-screen flex-col px-6 max-w-7xl mx-auto w-full text-foreground bg-background">
@@ -259,12 +191,12 @@ export default function FirstDashboard({
             <CreateAccountModal
                 isOpen={isSetupOpen}
                 onClose={() => setIsSetupOpen(false)}
-                onSave={handleSetup}
+                onSave={() => {}}
             />
             <AddExpenseModal
                 isOpen={isAddOpen}
                 onClose={() => setIsAddOpen(false)}
-                onAdd={handleAddExpense}
+                onAdd={() => {}}
             />
 
             <DashboardBtn
@@ -293,7 +225,6 @@ export default function FirstDashboard({
                     data={chartData}
                     currencySymbol={getCurrencySymbol(userStats.currency)}
                 />
-
                 <div className="flex flex-col gap-6">
                     <CategoryPreview
                         totalBalance={userStats.balance}
@@ -303,7 +234,7 @@ export default function FirstDashboard({
                     <AllCost
                         setView={setView}
                         expenses={localExpenses}
-                        handleDeleteExpense={handleDeleteExpense}
+                        handleDeleteExpense={() => {}}
                     />
                 </div>
             </div>

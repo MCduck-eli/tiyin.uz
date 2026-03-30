@@ -50,7 +50,7 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                                     offset="5%"
                                     stopColor="currentColor"
                                     className="text-primary"
-                                    stopOpacity={0.5}
+                                    stopOpacity={0.4}
                                 />
                                 <stop
                                     offset="95%"
@@ -61,39 +61,40 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                             </linearGradient>
                         </defs>
                         <CartesianGrid
-                            strokeDasharray="0"
+                            strokeDasharray="3 3"
                             vertical={false}
                             stroke="currentColor"
-                            className="text-border dark:text-white/10"
-                            opacity={0.2}
+                            className="text-border dark:text-white/5"
+                            opacity={0.1}
                         />
                         <XAxis
                             dataKey="date"
                             axisLine={false}
                             tickLine={false}
                             tick={{
-                                fontSize: 11,
-                                fontWeight: 600,
+                                fontSize: 10,
+                                fontWeight: 700,
                                 fill: "currentColor",
                             }}
                             className="text-muted-foreground dark:text-gray-500"
                             dy={15}
                         />
-                        <YAxis hide domain={["auto", "auto"]} />
+                        <YAxis
+                            hide
+                            domain={["dataMin - 100", "dataMax + 100"]}
+                        />
                         <Tooltip
                             cursor={{
-                                stroke: "rgb(var(--primary) / 0.5)",
-                                strokeWidth: 1,
-                                strokeDasharray: "4 4",
+                                stroke: "rgb(var(--primary) / 0.3)",
+                                strokeWidth: 2,
                             }}
                             contentStyle={{
-                                backgroundColor: "hsl(var(--card))",
-                                backdropFilter: "blur(16px)",
+                                backgroundColor: "rgba(var(--card), 0.8)",
+                                backdropFilter: "blur(20px)",
                                 borderRadius: "24px",
-                                border: "1px solid hsl(var(--border))",
-                                boxShadow:
-                                    "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-                                padding: "15px",
+                                border: "1px solid rgba(var(--border), 0.5)",
+                                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
+                                padding: "12px",
                             }}
                             itemStyle={{
                                 color: "hsl(var(--primary))",
@@ -113,15 +114,15 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                             labelFormatter={(label) => `${label}-sana`}
                         />
                         <Area
-                            type="natural"
+                            type="monotone"
                             dataKey="amount"
                             stroke="currentColor"
                             className="text-primary"
-                            strokeWidth={2}
-                            strokeLinecap="round"
+                            strokeWidth={3}
                             fillOpacity={1}
                             fill="url(#colorAmt)"
-                            animationDuration={2000}
+                            animationDuration={1500}
+                            connectNulls
                         />
                     </AreaChart>
                 </ResponsiveContainer>

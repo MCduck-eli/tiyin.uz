@@ -10,12 +10,15 @@ import {
     CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface HowItWorksProps {
     onClose: () => void;
 }
 
 export function HowItWorks({ onClose }: HowItWorksProps) {
+    const t = useTranslations("HowItWorks");
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -41,10 +44,10 @@ export function HowItWorks({ onClose }: HowItWorksProps) {
                 <div className="space-y-10">
                     <div className="text-center space-y-3 pt-4">
                         <h2 className="text-3xl md:text-4xl font-black tracking-tight italic text-primary">
-                            Tiyin qanday ishlaydi?
+                            {t("title")}
                         </h2>
                         <p className="text-muted-foreground text-lg font-medium">
-                            Sizning pullaringiz — sizning nazoratingizda
+                            {t("subtitle")}
                         </p>
                     </div>
 
@@ -52,20 +55,20 @@ export function HowItWorks({ onClose }: HowItWorksProps) {
                         {[
                             {
                                 icon: <Edit3 className="text-blue-500" />,
-                                title: "Harajatni yozing",
-                                desc: "Har bir xaridni (non, kiyim, taksi) sekundlar ichida qo'lda kiriting. Bu sizni ongli sarflashga o'rgatadi.",
+                                title: t("step1Title"),
+                                desc: t("step1Desc"),
                             },
                             {
                                 icon: <PieChart className="text-purple-500" />,
-                                title: "Avtomatik tahlil",
-                                desc: "Tizim haftalik, oylik va yillik sarf-harajatlaringizni chiroyli grafiklarda hisoblab beradi.",
+                                title: t("step2Title"),
+                                desc: t("step2Desc"),
                             },
                             {
                                 icon: (
                                     <AlertTriangle className="text-orange-500" />
                                 ),
-                                title: "Aqlli ogohlantirish",
-                                desc: "Kategoriya uchun limit belgilang. Agar pulingiz tugab borayotgan bo'lsa, biz sizni ogohlantiramiz.",
+                                title: t("step3Title"),
+                                desc: t("step3Desc"),
                             },
                         ].map((step, i) => (
                             <div
@@ -88,22 +91,22 @@ export function HowItWorks({ onClose }: HowItWorksProps) {
                     <div className="bg-muted/20 rounded-[32px] p-8 border border-border/50">
                         <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
                             <PlusCircle className="text-primary w-6 h-6" />{" "}
-                            Maxsus kategoriyalar
+                            {t("categoriesTitle")}
                         </h3>
                         <div className="flex flex-wrap gap-3">
                             {[
-                                "Ovqatlanish",
-                                "Kiyim-kechak",
-                                "Ko'ngilochar",
-                                "Qarzlar",
-                                "Sotib olish",
-                                "Transport",
+                                "food",
+                                "clothing",
+                                "entertainment",
+                                "debts",
+                                "shopping",
+                                "transport",
                             ].map((cat) => (
                                 <span
                                     key={cat}
                                     className="px-4 py-2 rounded-full bg-background border border-border text-sm font-medium shadow-sm"
                                 >
-                                    {cat}
+                                    {t(`categories.${cat}`)}
                                 </span>
                             ))}
                         </div>
@@ -114,8 +117,7 @@ export function HowItWorks({ onClose }: HowItWorksProps) {
                             className="rounded-full h-14 px-12 text-lg font-bold gap-2 shadow-lg"
                             onClick={onClose}
                         >
-                            <CheckCircle2 className="w-5 h-5" /> Tushunarli,
-                            boshladik!
+                            <CheckCircle2 className="w-5 h-5" /> {t("cta")}
                         </Button>
                     </div>
                 </div>

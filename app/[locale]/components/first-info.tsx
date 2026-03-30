@@ -10,6 +10,7 @@ import { AICounselor } from "@/components/ai-counselor";
 import NewNews from "@/components/new-news";
 import ChartCard from "@/components/chart-card";
 import InfoText from "@/components/info-text";
+import { useTranslations } from "next-intl";
 
 interface InfoProps {
     liveStocks: any;
@@ -27,6 +28,8 @@ interface NewsItem {
 }
 
 export default function FirsInfo({ liveStocks, user }: InfoProps) {
+    const t = useTranslations("Features");
+
     const [showHowItWorks, setShowHowItWorks] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [showAccountModal, setShowAccountModal] = useState(false);
@@ -51,7 +54,7 @@ export default function FirsInfo({ liveStocks, user }: InfoProps) {
                 setNews(filtered);
             }
         } catch (error) {
-            console.error("Yangiliklarni olishda xato:", error);
+            console.error("News fetch error:", error);
         } finally {
             setNewsLoading(false);
         }
@@ -88,23 +91,27 @@ export default function FirsInfo({ liveStocks, user }: InfoProps) {
             />
 
             <StockTicker />
-            <ChartCard liveStocks={liveStocks} />
+            <ChartCard />
             <NewNews newsLoading={newsLoading} news={news} />
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl mt-24 mb-32">
                 {[
                     {
                         icon: <PieChart />,
-                        title: "Vizual Analitika",
+                        title: t("visualAnalytics"),
+                        description: t("visualDesc"),
                         color: "text-blue-500",
                     },
                     {
                         icon: <ShieldCheck />,
-                        title: "Maksimal Xavfsizlik",
+                        title: t("maxSecurity"),
+                        description: t("securityDesc"),
                         color: "text-emerald-500",
                     },
                     {
                         icon: <Zap />,
-                        title: "Ultra Tezkor",
+                        title: t("ultraFast"),
+                        description: t("fastDesc"),
                         color: "text-orange-500",
                     },
                 ].map((feature, i) => (
@@ -121,8 +128,7 @@ export default function FirsInfo({ liveStocks, user }: InfoProps) {
                             {feature.title}
                         </h3>
                         <p className="text-muted-foreground leading-relaxed">
-                            Tiyin tizimi sizning moliyangizni aqlli nazorat
-                            qilish uchun mo'ljallangan.
+                            {feature.description}
                         </p>
                     </div>
                 ))}
