@@ -104,5 +104,125 @@
         "noResults": "Ma'lumot topilmadi",
         "ecosystem": "Tiyin Ekotizimi",
         "privacy": "Maxfiylik"
+    },
+    "Dashboard": {
+        "welcome": "Xush kelibsiz, {name}!",
+        "subtitle": "Bugungi moliyaviy holatingiz bilan tanishing.",
+        "addTarget": "Maqsad qo'shish",
+        "editBalance": "Balansni tahrirlash",
+        "addExpense": "Xarajat qo'shish"
+    },
+    "DashboardMessage": {
+        "ExpenseCounter": {
+            "title": "Bu oydagi sarf-xarajat",
+            "operations": "{count} ta operatsiya"
+        }
+    },
+    "DashboardCard": {
+        "balance": "Umumiy balans",
+        "monthlyExpense": "Oylik xarajat",
+        "budgetLeft": "Reja qoldiqlari",
+        "savings": "Tejamkorlik",
+        "active": "Faol",
+        "good": "Yaxshi",
+        "low": "Kam"
+    },
+    "ExpenseChart": {
+        "title": "Xarajatlar dinamikasi",
+        "monthlyAnalysis": "Oylik tahlil",
+        "spent": "Sarflandi",
+        "dateLabel": "{date}-sana"
+    },
+    "RecentActivities": {
+        "title": "So'nggi amallar",
+        "viewAll": "Hammasi",
+        "noExpenses": "Xarajatlar yo'q",
+        "defaultNote": "Xarajat"
+    },
+    "AddExpense": {
+        "title": "Yangi xarajat",
+        "subtitle": "Pulni tejashni unutmang",
+        "amountLabel": "Summa",
+        "categoryLabel": "Kategoriya",
+        "noteLabel": "Izoh (ixtiyoriy)",
+        "notePlaceholder": "Nima xarid qildingiz?",
+        "submitBtn": "Qo'shish",
+        "categories": {
+            "food": "Ovqat",
+            "transport": "Transport",
+            "clothing": "Kiyim",
+            "household": "Uy-ro'zg'or",
+            "entertainment": "Ko'ngilochar",
+            "other": "Boshqa"
+        }
+    },
+    "MaqsadCard": {
+        "liveProgress": "Live Progress",
+        "title": "Maqsad Sari",
+        "monthlySavings": "Oylik Jamg'arma",
+        "spent": "Sarflandi",
+        "free": "Erkin",
+        "aiCounselor": "AI Counselor",
+        "viewPlan": "REJANI KO'RISH",
+        "statusLabel": "Status",
+        "statuses": {
+            "stable": {
+                "label": "Stabil",
+                "message": "Xarajatlaringiz me'yorda. Reja bo'yicha davom eting."
+            },
+            "fast": {
+                "label": "Tezkor",
+                "message": "Ajoyib! Siz maqsad sari juda tez ilgarilayapsiz. Shunday davom eting!"
+            },
+            "slow": {
+                "label": "Sekin",
+                "message": "Diqqat! Xarajatlar ko'paygan. Maqsadga erishish muddati uzayishi mumkin."
+            },
+            "danger": {
+                "label": "Xavfli",
+                "message": "Xavf! Siz daromadingizdan ko'p xarajat qilyapsiz. Maqsad xavf ostida!"
+            }
+        }
+    },
+    "GoalsList": {
+        "defaultTitle": "Reja",
+        "prediction": "AI Bashorati",
+        "days": "kun",
+        "aiProgress": "AI Progress",
+        "todayStatus": "Bugungi holat",
+        "statusLosing": "Xarajat ko'p - Rejadan uzoqlashish",
+        "statusWinning": "Tejamkorlik - Maqsadga yaqinlashish",
+        "dailyBalance": "Kunlik Balans",
+        "target": "Maqsad",
+        "virtualSaved": "Virtual Jamg'arma"
+    },
+    "Footer": {
+        "rights": "Barcha huquqlar himoyalangan.",
+        "createdWith": "Created with",
+        "byUser": "by Eldor Halikov"
+    },
+    "GoalsPage": {
+        "back": "Orqaga",
+        "title": "AI Planner",
+        "goalName": "Maqsad nomi",
+        "goalPlaceholder": "Masalan: MacBook Pro",
+        "currency": "Valyuta",
+        "price": "Qiymati",
+        "monthlySalary": "Oylik daromad",
+        "livingCosts": "Yashash xarajatlari (AI)",
+        "calculateBtn": "HISOB-KITOBLAR",
+        "month": "Oy",
+        "termFor": "uchun muddat",
+        "savingsPercent": "Tejash foizi",
+        "monthlyAmount": "Oylik mablag'",
+        "aiStrategy": "AI Strategiya",
+        "strategyTight": "Daromadingiz va yashash xarajatlaringiz o'rtasidagi farq juda kichik. Maqsadga erishish uchun qo'shimcha daromad yoki xarajatlarni 15% ga qisqartirish shart.",
+        "strategyNormal": "Yashash xarajatlaridan tashqari oyiga {amount} {currency} tejash orqali siz kutilgan muddatda natijaga erishasiz.",
+        "savePlan": "REJANI SAQLASH",
+        "waitingAnalysis": "Ma'lumotlar tahlili kutilmoqda",
+        "activePlans": "Mening faol rejalarim"
+    },
+    "Common": {
+        "loading": "Tizim yuklanmoqda"
     }
 }

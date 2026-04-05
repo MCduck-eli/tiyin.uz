@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowUpRight, Target, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 interface UserStats {
     balance: number;
@@ -24,6 +25,8 @@ export default function MaqsadCard({
     getCurrencySymbol,
 }: MaqsadProps) {
     const navigate = useRouter();
+    const t = useTranslations("MaqsadCard");
+
     const goalAnalysis = useMemo(() => {
         const income = userStats.balance;
         const expenses = monthlyTotal;
@@ -31,40 +34,41 @@ export default function MaqsadCard({
         const rate = income > 0 ? (savings / income) * 100 : 0;
 
         let status = {
-            label: "Stabil",
-            message: "Xarajatlaringiz me'yorda. Reja bo'yicha davom eting.",
+            key: "stable",
             color: "text-blue-500",
             bg: "bg-blue-500",
         };
 
         if (rate > 30) {
             status = {
-                label: "Tezkor",
-                message:
-                    "Ajoyib! Siz maqsad sari juda tez ilgarilayapsiz. Shunday davom eting!",
+                key: "fast",
                 color: "text-emerald-500",
                 bg: "bg-emerald-500",
             };
         } else if (rate < 10 && rate > 0) {
             status = {
-                label: "Sekin",
-                message:
-                    "Diqqat! Xarajatlar ko'paygan. Maqsadga erishish muddati uzayishi mumkin.",
+                key: "slow",
                 color: "text-orange-500",
                 bg: "bg-orange-500",
             };
         } else if (savings <= 0) {
             status = {
-                label: "Xavfli",
-                message:
-                    "Xavf! Siz daromadingizdan ko'p xarajat qilyapsiz. Maqsad xavf ostida!",
+                key: "danger",
                 color: "text-destructive",
                 bg: "bg-destructive",
             };
         }
 
-        return { rate: Math.max(0, rate), ...status, savings };
-    }, [monthlyTotal, userStats.balance]);
+        return {
+            rate: Math.max(0, rate),
+            label: t(`statuses.${status.key}.label`),
+            message: t(`statuses.${status.key}.message`),
+            color: status.color,
+            bg: status.bg,
+            savings,
+        };
+    }, [monthlyTotal, userStats.balance, t]);
+
     return (
         <div className="mt-4 mb-10">
             <Card className="p-8 rounded-[40px] border-primary/20 bg-card shadow-2xl overflow-hidden relative border-2">
@@ -73,10 +77,10 @@ export default function MaqsadCard({
                         <div className="flex justify-between items-end">
                             <div className="space-y-1">
                                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
-                                    Live Progress
+                                    {t("liveProgress")}
                                 </div>
                                 <h3 className="text-3xl font-black italic uppercase tracking-tighter">
-                                    Maqsad Sari
+                                    {t("title")}
                                 </h3>
                             </div>
                             <div className="text-right">
@@ -86,7 +90,7 @@ export default function MaqsadCard({
                                     {Math.round(goalAnalysis.rate)}%
                                 </span>
                                 <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-                                    Oylik Jamg'arma
+                                    {t("monthlySavings")}
                                 </p>
                             </div>
                         </div>
@@ -98,10 +102,11 @@ export default function MaqsadCard({
                             />
                             <div className="flex justify-between text-[11px] font-bold opacity-60 uppercase tracking-tighter">
                                 <span>
-                                    Sarflandi: {monthlyTotal.toLocaleString()}
+                                    {t("spent")}:{" "}
+                                    {monthlyTotal.toLocaleString()}
                                 </span>
                                 <span>
-                                    Erkin:{" "}
+                                    {t("free")}:{" "}
                                     {goalAnalysis.savings.toLocaleString()}{" "}
                                     {getCurrencySymbol(userStats.currency)}
                                 </span>
@@ -118,7 +123,7 @@ export default function MaqsadCard({
                             </div>
                             <div className="flex items-center justify-between mb-3">
                                 <h4 className="font-black text-xs uppercase tracking-widest flex items-center gap-2">
-                                    AI Counselor{" "}
+                                    {t("aiCounselor")}{" "}
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                 </h4>
                                 <span
@@ -136,12 +141,12 @@ export default function MaqsadCard({
                                     onClick={() => navigate.push("/goals")}
                                     className="rounded-2xl font-black text-xs px-6 h-10 bg-primary shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
                                 >
-                                    REJANI KO'RISH{" "}
+                                    {t("viewPlan")}{" "}
                                     <ArrowUpRight size={14} className="ml-1" />
                                 </Button>
                                 <div className="flex flex-col items-end">
                                     <span className="text-[10px] font-black opacity-40 uppercase">
-                                        Status
+                                        {t("statusLabel")}
                                     </span>
                                     <span
                                         className={`text-xs font-black uppercase ${goalAnalysis.color}`}

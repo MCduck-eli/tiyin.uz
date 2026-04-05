@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Fingerprint } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function Loader() {
+    const t = useTranslations("Common");
+
     return (
         <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-background">
             <div className="relative flex items-center justify-center">
@@ -41,7 +44,7 @@ export function Loader() {
                 className="mt-10 flex flex-col items-center gap-3"
             >
                 <p className="text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground/60 ml-1">
-                    Tizim yuklanmoqda
+                    {t("loading")}
                 </p>
                 <div className="flex gap-1.5">
                     {[0, 1, 2].map((i) => (

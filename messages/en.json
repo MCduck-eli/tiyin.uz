@@ -104,5 +104,125 @@
         "noResults": "No results found",
         "ecosystem": "Tiyin Ecosystem",
         "privacy": "Privacy"
+    },
+    "Dashboard": {
+        "welcome": "Welcome, {name}!",
+        "subtitle": "Check your financial status for today.",
+        "addTarget": "Add goal",
+        "editBalance": "Edit balance",
+        "addExpense": "Add expense"
+    },
+    "DashboardMessage": {
+        "ExpenseCounter": {
+            "title": "Expenses this month",
+            "operations": "{count, plural, one {# operation} other {# operations}}"
+        }
+    },
+    "DashboardCard": {
+        "balance": "Total Balance",
+        "monthlyExpense": "Monthly Expense",
+        "budgetLeft": "Budget Left",
+        "savings": "Savings Rate",
+        "active": "Active",
+        "good": "Good",
+        "low": "Low"
+    },
+    "ExpenseChart": {
+        "title": "Expense Dynamics",
+        "monthlyAnalysis": "Monthly Analysis",
+        "spent": "Spent",
+        "dateLabel": "Date: {date}"
+    },
+    "RecentActivities": {
+        "title": "Recent Activities",
+        "viewAll": "View All",
+        "noExpenses": "No expenses",
+        "defaultNote": "Expense"
+    },
+    "AddExpense": {
+        "title": "New Expense",
+        "subtitle": "Don't forget to save money",
+        "amountLabel": "Amount",
+        "categoryLabel": "Category",
+        "noteLabel": "Note (optional)",
+        "notePlaceholder": "What did you buy?",
+        "submitBtn": "Add Expense",
+        "categories": {
+            "food": "Food",
+            "transport": "Transport",
+            "clothing": "Clothing",
+            "household": "Household",
+            "entertainment": "Entertainment",
+            "other": "Other"
+        }
+    },
+    "MaqsadCard": {
+        "liveProgress": "Live Progress",
+        "title": "Towards Goal",
+        "monthlySavings": "Monthly Savings",
+        "spent": "Spent",
+        "free": "Free",
+        "aiCounselor": "AI Counselor",
+        "viewPlan": "VIEW PLAN",
+        "statusLabel": "Status",
+        "statuses": {
+            "stable": {
+                "label": "Stable",
+                "message": "Your expenses are normal. Continue according to the plan."
+            },
+            "fast": {
+                "label": "Fast",
+                "message": "Great! You are moving towards your goal very quickly. Keep it up!"
+            },
+            "slow": {
+                "label": "Slow",
+                "message": "Attention! Expenses have increased. The goal achievement period may be extended."
+            },
+            "danger": {
+                "label": "Danger",
+                "message": "Danger! You are spending more than you earn. Goal is at risk!"
+            }
+        }
+    },
+    "GoalsList": {
+        "defaultTitle": "Plan",
+        "prediction": "AI Prediction",
+        "days": "days",
+        "aiProgress": "AI Progress",
+        "todayStatus": "Current status",
+        "statusLosing": "High spending - Falling behind",
+        "statusWinning": "Saving well - Getting closer",
+        "dailyBalance": "Daily Balance",
+        "target": "Target",
+        "virtualSaved": "Virtual Savings"
+    },
+    "Footer": {
+        "rights": "All rights reserved.",
+        "createdWith": "Created with",
+        "byUser": "by Eldor Halikov"
+    },
+    "GoalsPage": {
+        "back": "Back",
+        "title": "AI Planner",
+        "goalName": "Goal Name",
+        "goalPlaceholder": "Example: MacBook Pro",
+        "currency": "Currency",
+        "price": "Price",
+        "monthlySalary": "Monthly Income",
+        "livingCosts": "Living Costs (AI)",
+        "calculateBtn": "CALCULATE",
+        "month": "Month",
+        "termFor": "term for",
+        "savingsPercent": "Savings Percent",
+        "monthlyAmount": "Monthly Amount",
+        "aiStrategy": "AI Strategy",
+        "strategyTight": "The gap between your income and living costs is too small. To reach your goal, you must find extra income or reduce expenses by 15%.",
+        "strategyNormal": "By saving {amount} {currency} per month beyond living costs, you will achieve the result on time.",
+        "savePlan": "SAVE PLAN",
+        "waitingAnalysis": "Waiting for data analysis",
+        "activePlans": "My active plans"
+    },
+    "Common": {
+        "loading": "System is loading"
     }
 }

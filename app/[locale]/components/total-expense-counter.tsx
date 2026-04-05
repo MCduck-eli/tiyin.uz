@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { TrendingDown, CreditCard } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface TotalExpenseCounterProps {
     expenses: any[];
@@ -13,6 +14,8 @@ export function TotalExpenseCounter({
     expenses,
     currencySymbol,
 }: TotalExpenseCounterProps) {
+    const t = useTranslations("DashboardMessage.ExpenseCounter");
+
     const monthlyTotalSpent = useMemo(() => {
         const now = new Date();
         const currentMonth = now.getMonth();
@@ -28,13 +31,17 @@ export function TotalExpenseCounter({
             })
             .reduce((sum, item) => sum + item.amount, 0);
     }, [expenses]);
+
     const monthlyCount = useMemo(() => {
         const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
         return expenses.filter((exp) => {
             const expDate = new Date(exp.date);
             return (
-                expDate.getMonth() === now.getMonth() &&
-                expDate.getFullYear() === now.getFullYear()
+                expDate.getMonth() === currentMonth &&
+                expDate.getFullYear() === currentYear
             );
         }).length;
     }, [expenses]);
@@ -54,7 +61,7 @@ export function TotalExpenseCounter({
 
                 <div className="space-y-0.5">
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-60">
-                        Bu oydagi sarf-xarajat
+                        {t("title")}
                     </p>
                     <div className="flex items-baseline gap-1.5">
                         <motion.h2
@@ -76,7 +83,7 @@ export function TotalExpenseCounter({
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/50 border border-border/50">
                     <CreditCard className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[10px] font-bold text-foreground">
-                        {monthlyCount} ta operatsiya
+                        {t("operations", { count: monthlyCount })}
                     </span>
                 </div>
             </div>

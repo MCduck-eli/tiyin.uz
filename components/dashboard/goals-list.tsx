@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Trash2, Trophy, TrendingUp, AlertCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useTranslations } from "next-intl";
 
 interface Goal {
     id: string;
@@ -23,6 +24,8 @@ interface GoalsListProps {
 }
 
 export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
+    const t = useTranslations("GoalsList");
+
     const handleDelete = async (id: string) => {
         const { error } = await supabase.from("goals").delete().eq("id", id);
         if (!error) onUpdate();
@@ -67,7 +70,7 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                         <div className="flex justify-between items-start mb-6">
                             <div>
                                 <h4 className="text-xl font-black uppercase italic flex items-center gap-2">
-                                    {goal.title || "Reja"}{" "}
+                                    {goal.title || t("defaultTitle")}{" "}
                                     {goal.is_completed && (
                                         <Trophy
                                             className="text-yellow-500"
@@ -76,14 +79,14 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                                     )}
                                 </h4>
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                                    AI Bashorati:{" "}
+                                    {t("prediction")}:{" "}
                                     {actualDailySaving > 0
                                         ? Math.ceil(
                                               (target - totalCalculatedSaved) /
                                                   actualDailySaving,
                                           )
                                         : "∞"}{" "}
-                                    kun
+                                    {t("days")}
                                 </p>
                             </div>
                             <Button
@@ -100,7 +103,7 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                             <div className="space-y-2">
                                 <div className="flex justify-between items-end text-[10px] font-black uppercase">
                                     <span className="flex items-center gap-1 opacity-60">
-                                        AI Progress
+                                        {t("aiProgress")}
                                     </span>
                                     <span
                                         className={
@@ -134,18 +137,18 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
                                     )}
                                     <div>
                                         <p className="text-[10px] font-black uppercase opacity-60">
-                                            Bugungi holat
+                                            {t("todayStatus")}
                                         </p>
                                         <p className="text-sm font-bold italic">
                                             {isLosingGround
-                                                ? "Xarajat ko'p - Rejadan uzoqlashish"
-                                                : "Tejamkorlik - Maqsadga yaqinlashish"}
+                                                ? t("statusLosing")
+                                                : t("statusWinning")}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[10px] font-black opacity-40 uppercase">
-                                        Kunlik Balans
+                                        {t("dailyBalance")}
                                     </p>
                                     <p
                                         className={`text-sm font-black ${actualDailySaving >= 0 ? "text-emerald-500" : "text-destructive"}`}
@@ -158,10 +161,11 @@ export function GoalsList({ goals, currency, onUpdate }: GoalsListProps) {
 
                             <div className="flex justify-between items-center text-[10px] font-black uppercase opacity-50 tracking-tighter">
                                 <span>
-                                    Maqsad: {target.toLocaleString()} {currency}
+                                    {t("target")}: {target.toLocaleString()}{" "}
+                                    {currency}
                                 </span>
                                 <span>
-                                    Virtual Jamg'arma:{" "}
+                                    {t("virtualSaved")}:{" "}
                                     {totalCalculatedSaved.toLocaleString(
                                         undefined,
                                         { maximumFractionDigits: 0 },

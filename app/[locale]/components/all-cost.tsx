@@ -1,4 +1,7 @@
+"use client";
+
 import { ArrowUpRight, Trash2, TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CostProps {
     setView: any;
@@ -11,23 +14,25 @@ export default function AllCost({
     expenses,
     handleDeleteExpense,
 }: CostProps) {
+    const t = useTranslations("RecentActivities");
+
     return (
         <div className="flex-1 rounded-[48px] bg-card/40 border border-border p-8 shadow-sm flex flex-col overflow-hidden backdrop-blur-md">
             <div className="flex justify-between items-center mb-6">
                 <p className="text-muted-foreground text-[10px] uppercase font-black tracking-widest opacity-70">
-                    So'nggi amallar
+                    {t("title")}
                 </p>
                 <button
                     onClick={() => setView("history")}
                     className="text-[10px] font-bold text-primary flex items-center gap-1 uppercase tracking-wider hover:underline"
                 >
-                    Hammasi <ArrowUpRight className="w-3 h-3" />
+                    {t("viewAll")} <ArrowUpRight className="w-3 h-3" />
                 </button>
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-1">
                 {expenses.length === 0 ? (
                     <p className="text-center text-xs font-bold text-muted-foreground pt-10">
-                        Xarajatlar yo'q
+                        {t("noExpenses")}
                     </p>
                 ) : (
                     expenses.slice(0, 5).map((expense) => (
@@ -41,7 +46,7 @@ export default function AllCost({
                                 </div>
                                 <div>
                                     <p className="text-xs font-bold text-foreground truncate max-w-[80px]">
-                                        {expense.note || "Xarajat"}
+                                        {expense.note || t("defaultNote")}
                                     </p>
                                     <p className="text-[9px] text-muted-foreground uppercase font-bold">
                                         {expense.category}

@@ -1,3 +1,5 @@
+"use client";
+
 import { StatItem } from "@/types";
 import { motion } from "framer-motion";
 
@@ -34,7 +36,7 @@ export default function DashboardCard({
                     <h3 className="text-2xl font-black tabular-nums text-foreground">
                         {stat.value}
                         <span className="text-sm font-medium text-muted-foreground ml-1">
-                            {stat.title.includes("Tejamkorlik")
+                            {stat.id === "4"
                                 ? ""
                                 : getCurrencySymbol(userStats.currency)}
                         </span>

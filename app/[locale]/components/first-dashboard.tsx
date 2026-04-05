@@ -1,3 +1,5 @@
+"use client";
+
 import { Calendar, TrendingUp, Wallet, Zap } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { AddExpenseModal } from "@/components/dashboard/add-expense-modal";
@@ -12,6 +14,7 @@ import { AICounselor } from "@/components/ai-counselor";
 import { GoalsList } from "@/components/dashboard/goals-list";
 import MaqsadCard from "./maqsad-card";
 import DashboardBtn from "./dashboard-btn";
+import { useTranslations } from "next-intl";
 
 interface DashboardProps {
     initialBalance?: number;
@@ -38,6 +41,7 @@ export default function FirstDashboard({
     const [localExpenses, setLocalExpenses] = useState<any[]>(propExpenses);
     const [goals, setGoals] = useState<any[]>([]);
     const [userName, setUserName] = useState("");
+    const t = useTranslations("DashboardCard");
 
     const fetchGoals = async () => {
         const {
@@ -51,44 +55,72 @@ export default function FirstDashboard({
         if (data) setGoals(data);
     };
 
+    const fetchDashboardData = async () => {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+            setIsLoading(false);
+            return;
+        }
+
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
+
+        if (profile) {
+            setUserStats({
+                balance: profile.initial_balance,
+                currency: profile.currency,
+            });
+            setUserName(profile.full_name || "");
+            if (!profile.has_setup) setIsSetupOpen(true);
+        } else {
+            setIsSetupOpen(true);
+        }
+
+        const { data: expenses } = await supabase
+            .from("expenses")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("date", { ascending: false });
+
+        if (expenses) setLocalExpenses(expenses);
+        await fetchGoals();
+        setIsLoading(false);
+    };
+
     useEffect(() => {
         setIsMounted(true);
-        const fetchDashboardData = async () => {
-            const {
-                data: { user },
-            } = await supabase.auth.getUser();
-            if (!user) {
-                setIsLoading(false);
-                return;
-            }
-
-            const { data: profile } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user.id)
-                .single();
-            if (profile) {
-                setUserStats({
-                    balance: profile.initial_balance,
-                    currency: profile.currency,
-                });
-                setUserName(profile.full_name || "");
-                if (!profile.has_setup) setIsSetupOpen(true);
-            } else {
-                setIsSetupOpen(true);
-            }
-
-            const { data: expenses } = await supabase
-                .from("expenses")
-                .select("*")
-                .eq("user_id", user.id)
-                .order("date", { ascending: false });
-            if (expenses) setLocalExpenses(expenses);
-            await fetchGoals();
-            setIsLoading(false);
-        };
         fetchDashboardData();
     }, []);
+
+    const handleAddExpense = async (newExpense: any) => {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await supabase
+            .from("expenses")
+            .insert([{ ...newExpense, user_id: user.id }])
+            .select()
+            .single();
+
+        if (!error && data) {
+            setLocalExpenses((prev) => [data, ...prev]);
+        }
+    };
+
+    const handleDeleteExpense = async (id: string) => {
+        const { error } = await supabase.from("expenses").delete().eq("id", id);
+
+        if (!error) {
+            setLocalExpenses((prev) => prev.filter((exp) => exp.id !== id));
+        }
+    };
 
     const getCurrencySymbol = (code: string) => {
         switch (code) {
@@ -155,30 +187,30 @@ export default function FirstDashboard({
     const stats = [
         {
             id: "1",
-            title: "Umumiy balans",
+            title: t("balance"),
             value: currentBalance.toLocaleString(),
-            trend: currentBalance > 0 ? "Faol" : "0",
+            trend: currentBalance > 0 ? t("active") : "0",
             icon: <Wallet className="text-blue-500" />,
         },
         {
             id: "2",
-            title: "Oylik xarajat",
+            title: t("monthlyExpense"),
             value: monthlyTotal.toLocaleString(),
             trend: `-${((monthlyTotal / (userStats.balance || 1)) * 100).toFixed(1)}%`,
             icon: <TrendingUp className="text-emerald-500" />,
         },
         {
             id: "3",
-            title: "Reja qoldiqlari",
+            title: t("budgetLeft"),
             value: budgetLeft.toLocaleString(),
             trend: `${budgetPercent}%`,
             icon: <Calendar className="text-orange-500" />,
         },
         {
             id: "4",
-            title: "Tejamkorlik",
+            title: t("savings"),
             value: `${savingsRate}%`,
-            trend: savingsRate > 20 ? "Yaxshi" : "Kam",
+            trend: savingsRate > 20 ? t("good") : t("low"),
             icon: <Zap className="text-yellow-500" />,
         },
     ];
@@ -191,12 +223,12 @@ export default function FirstDashboard({
             <CreateAccountModal
                 isOpen={isSetupOpen}
                 onClose={() => setIsSetupOpen(false)}
-                onSave={() => {}}
+                onSave={fetchDashboardData}
             />
             <AddExpenseModal
                 isOpen={isAddOpen}
                 onClose={() => setIsAddOpen(false)}
-                onAdd={() => {}}
+                onAdd={handleAddExpense}
             />
 
             <DashboardBtn
@@ -234,7 +266,7 @@ export default function FirstDashboard({
                     <AllCost
                         setView={setView}
                         expenses={localExpenses}
-                        handleDeleteExpense={() => {}}
+                        handleDeleteExpense={handleDeleteExpense}
                     />
                 </div>
             </div>

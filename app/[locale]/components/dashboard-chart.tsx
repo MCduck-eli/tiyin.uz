@@ -9,6 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface ExpenseChartProps {
     data: any[];
@@ -16,18 +17,20 @@ interface ExpenseChartProps {
 }
 
 export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
+    const t = useTranslations("ExpenseChart");
+
     return (
         <div className="md:col-span-2 h-112.5 rounded-[48px] bg-card/30 dark:bg-neutral-900/50 border border-border dark:border-white/10 p-10 shadow-2xl flex flex-col relative overflow-hidden group backdrop-blur-xl">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 dark:bg-primary/20 blur-[100px] rounded-full" />
 
             <div className="flex justify-between items-center mb-8 relative z-10">
                 <p className="text-muted-foreground dark:text-gray-400 text-xs uppercase font-black tracking-widest opacity-70">
-                    Xarajatlar dinamikasi
+                    {t("title")}
                 </p>
                 <div className="flex items-center gap-2 bg-primary/10 dark:bg-primary/20 px-3 py-1 rounded-full border border-primary/20 dark:border-primary/40">
                     <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.8)]" />
                     <span className="text-[10px] font-bold text-primary dark:text-primary uppercase">
-                        Oylik tahlil
+                        {t("monthlyAnalysis")}
                     </span>
                 </div>
             </div>
@@ -109,9 +112,11 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                             }}
                             formatter={(value: any) => [
                                 `${Number(value).toLocaleString()} ${currencySymbol}`,
-                                "Sarflandi",
+                                t("spent"),
                             ]}
-                            labelFormatter={(label) => `${label}-sana`}
+                            labelFormatter={(label) =>
+                                t("dateLabel", { date: label })
+                            }
                         />
                         <Area
                             type="monotone"

@@ -104,5 +104,125 @@
         "noResults": "Ничего не найдено",
         "ecosystem": "Экосистема Tiyin",
         "privacy": "Конфиденциальность"
+    },
+    "Dashboard": {
+        "welcome": "Добро пожаловать, {name}!",
+        "subtitle": "Ознакомьтесь с вашим финансовым состоянием на сегодня.",
+        "addTarget": "Добавить цель",
+        "editBalance": "Изменить баланс",
+        "addExpense": "Добавить расход"
+    },
+    "DashboardMessage": {
+        "ExpenseCounter": {
+            "title": "Расходы за этот месяц",
+            "operations": "{count, plural, one {# операция} few {# операции} many {# операций} other {# операции}}"
+        }
+    },
+    "DashboardCard": {
+        "balance": "Общий баланс",
+        "monthlyExpense": "Расход за месяц",
+        "budgetLeft": "Остаток бюджета",
+        "savings": "Уровень экономии",
+        "active": "Активен",
+        "good": "Хорошо",
+        "low": "Мало"
+    },
+    "ExpenseChart": {
+        "title": "Динамика расходов",
+        "monthlyAnalysis": "Ежемесячный анализ",
+        "spent": "Потрачено",
+        "dateLabel": "Дата: {date}"
+    },
+    "RecentActivities": {
+        "title": "Последние операции",
+        "viewAll": "Все",
+        "noExpenses": "Расходов нет",
+        "defaultNote": "Расход"
+    },
+    "AddExpense": {
+        "title": "Новый расход",
+        "subtitle": "Не забывайте экономить",
+        "amountLabel": "Сумма",
+        "categoryLabel": "Категория",
+        "noteLabel": "Примечание (опционально)",
+        "notePlaceholder": "Что вы купили?",
+        "submitBtn": "Добавить",
+        "categories": {
+            "food": "Еда",
+            "transport": "Транспорт",
+            "clothing": "Одежда",
+            "household": "Дом",
+            "entertainment": "Развлечения",
+            "other": "Другое"
+        }
+    },
+    "MaqsadCard": {
+        "liveProgress": "Live Progress",
+        "title": "К Цели",
+        "monthlySavings": "Ежемесячные накопления",
+        "spent": "Потрачено",
+        "free": "Свободно",
+        "aiCounselor": "AI Советник",
+        "viewPlan": "ПОСМОТРЕТЬ ПЛАН",
+        "statusLabel": "Статус",
+        "statuses": {
+            "stable": {
+                "label": "Стабильно",
+                "message": "Ваши расходы в норме. Продолжайте в соответствии с планом."
+            },
+            "fast": {
+                "label": "Быстро",
+                "message": "Отлично! Вы очень быстро продвигаетесь к цели. Так держать!"
+            },
+            "slow": {
+                "label": "Медленно",
+                "message": "Внимание! Расходы увеличились. Срок достижения цели может увеличиться."
+            },
+            "danger": {
+                "label": "Опасно",
+                "message": "Опасно! Вы тратите больше, чем зарабатываете. Цель под угрозой!"
+            }
+        }
+    },
+    "GoalsList": {
+        "defaultTitle": "План",
+        "prediction": "Прогноз AI",
+        "days": "дн.",
+        "aiProgress": "Прогресс AI",
+        "todayStatus": "Текущий статус",
+        "statusLosing": "Много трат - Отдаление от цели",
+        "statusWinning": "Экономия - Приближение к цели",
+        "dailyBalance": "Дневной баланс",
+        "target": "Цель",
+        "virtualSaved": "Виртуальные сбережения"
+    },
+    "Footer": {
+        "rights": "Все права защищены.",
+        "createdWith": "Создано с",
+        "byUser": "Элдором Халиковым"
+    },
+    "GoalsPage": {
+        "back": "Назад",
+        "title": "AI Планировщик",
+        "goalName": "Название цели",
+        "goalPlaceholder": "Например: MacBook Pro",
+        "currency": "Валюта",
+        "price": "Стоимость",
+        "monthlySalary": "Месячный доход",
+        "livingCosts": "Расходы на жизнь (AI)",
+        "calculateBtn": "РАССЧИТАТЬ",
+        "month": "Мес",
+        "termFor": "срок для",
+        "savingsPercent": "Процент экономии",
+        "monthlyAmount": "Сумма в месяц",
+        "aiStrategy": "AI Стратегия",
+        "strategyTight": "Разница между вашим доходом и расходами слишком мала. Для достижения цели необходимо найти доп. доход или сократить расходы на 15%.",
+        "strategyNormal": "Экономя {amount} {currency} в месяц сверх расходов на жизнь, вы достигнете результата в срок.",
+        "savePlan": "СОХРАНИТЬ ПЛАН",
+        "waitingAnalysis": "Ожидание анализа данных",
+        "activePlans": "Мои активные планы"
+    },
+    "Common": {
+        "loading": "Система загружается"
     }
 }
