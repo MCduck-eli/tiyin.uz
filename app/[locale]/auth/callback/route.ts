@@ -4,12 +4,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(
     request: Request,
-    { params }: { params: { locale: string } },
+    { params }: { params: Promise<{ locale: string }> },
 ) {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get("code");
-
-    const locale = params.locale || "uz";
+    const resolvedParams = await params;
+    const locale = resolvedParams.locale || "uz";
 
     const next = searchParams.get("next") ?? `/${locale}`;
 
@@ -25,10 +25,16 @@ export async function GET(
                         return cookieStore.get(name)?.value;
                     },
                     set(name: string, value: string, options: CookieOptions) {
-                        cookieStore.set({ name, value, ...options });
+                        try {
+                            cookieStore.set({ name, value, ...options });
+                        } catch (error) {}
                     },
                     remove(name: string, options: CookieOptions) {
-                        cookieStore.set({ name, value: "", ...options });
+                        try {
+                            cookieStore.set({ name, value: "", ...options });
+                        } catch (error) {
+                            //
+                        }
                     },
                 },
             },
@@ -40,5 +46,6 @@ export async function GET(
             return NextResponse.redirect(`${origin}${next}`);
         }
     }
+
     return NextResponse.redirect(`${origin}/${locale}?error=auth-code-error`);
 }
