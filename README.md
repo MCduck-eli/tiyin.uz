@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🇺🇿 O'zbek tili
 
-## Getting Started
+Loyiha haqida
+Tiyin.uz — bu shaxsiy moliya va xarajatlarni boshqarish uchun mo'ljallangan zamonaviy platforma. Loyihaning asosiy maqsadi foydalanuvchilarga o'z pullarini aqlli ravishda tejash, maqsadlariga qachon yetishini hisoblash va sun'iy intellekt (AI) yordamida moliyaviy nazoratni o'rnatishda ko'maklashishdir.
 
-First, run the development server:
+Asosiy funksiyalar:
+AI Moliyaviy Tahlil: Daromad va xarajatlaringizdan kelib chiqib, maqsadlaringizga qachon yetishingizni aniq hisoblab beruvchi AI algoritmi.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Maqsadlarni Boshqarish: Yangi mashina, uy yoki gadjet uchun qancha vaqt davomida, kuniga qancha tejash kerakligini rejalashtirish.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Xarajatlar Nazorati: Kundalik va oylik xarajatlarni kategoriyalar bo'yicha kuzatish.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Birja va Yangiliklar: Jahon moliya bozori, valyuta kurslari va eng so'nggi iqtisodiy yangiliklarni real vaqt rejimida ko'rib borish.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Multi-til Tizimi: O'zbek, Rus va Ingliz tillarida to'liq ishlash imkoniyati.
 
-## Learn More
+🇷🇺 Русский язык
+О проекте
+Tiyin.uz — это современная платформа для управления личными финансами и расходами. Основная цель проекта — помочь пользователям разумно экономить деньги, рассчитывать сроки достижения своих целей и осуществлять финансовый контроль с помощью искусственного интеллекта (ИИ).
 
-To learn more about Next.js, take a look at the following resources:
+Основные функции:
+Финансовый ИИ-анализ: Алгоритм ИИ, который на основе ваших доходов и расходов точно рассчитывает время достижения ваших целей.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Управление целями: Планирование того, сколько времени и сколько нужно откладывать ежедневно на машину, дом или новый гаджет.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Контроль расходов: Отслеживание ежедневных и ежемесячных расходов по категориям.
 
-## Deploy on Vercel
+Биржа и Новости: Мониторинг мировых финансовых рынков, курсов валют и последних экономических новостей в реальном времени.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Мультиязычность: Полная поддержка узбекского, русского и английского языков.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🇬🇧 English
+About the Project
+Tiyin.uz is a modern platform designed for personal finance and expense management. The primary goal of the project is to help users save money smartly, calculate when they will reach their financial goals, and maintain financial control through Artificial Intelligence (AI).
+
+Key Features:
+AI Financial Analysis: An AI algorithm that accurately calculates when you'll reach your goals based on your income and spending habits.
+
+Goal Management: Plan exactly how long and how much you need to save daily for a new car, house, or gadget.
+
+Expense Tracking: Monitor daily and monthly expenses organized by categories.
+
+Stock Market & News: Stay updated with real-time global financial markets, exchange rates, and the latest economic news.
+
+Multi-language Support: Full localization for Uzbek, Russian, and English.
+
+🛠 Tech Stack
+Frontend: Next.js 14, Tailwind CSS, Shadcn/UI
+
+Backend: Supabase (PostgreSQL, Auth, RLS)
+
+Animations: Framer Motion
+
+Localization: next-intl
+
+Icons: Lucide-react
+
+Install dependencies: npm install
+
+Set up Supabase environment variables (.env).
+
+Run the development server: npm run dev
+
+Tiyin.uz — Har bir tiyiningiz nazoratda! | Every penny under control!
