@@ -9,8 +9,45 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-    title: "Moliya Nazorati",
-    description: "Xarajatlaringizni aqlli boshqaring",
+    title: "Tiyin.uz - O'zbekistondagi moliya va hisob-kitob platformasi",
+    description:
+        "Tiyin.uz orqali pullaringizni hisoblang, valyuta kurslarini kuzating va moliyaviy savodxonligingizni oshiring.",
+    keywords: [
+        "moliya",
+        "pul hisoblash",
+        "tiyin uz",
+        "valyuta kursi",
+        "o'zbekiston moliya",
+    ],
+    icons: {
+        icon: "/icon.png",
+        apple: "/icon.png",
+    },
+    openGraph: {
+        title: "Tiyin.uz - Aqlli moliya boshqaruvi",
+        description: "Shaxsiy mablag'laringizni biz bilan oson boshqaring.",
+        url: "https://tiyin-uz.vercel.app",
+        siteName: "Tiyin uz",
+        images: [
+            {
+                url: "/logo.png",
+                width: 1200,
+                height: 630,
+                alt: "Tiyin.uz Logo",
+            },
+        ],
+        locale: "uz_UZ",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Tiyin.uz - Aqlli moliya boshqaruvi",
+        description: "Mablag'laringizni biz bilan oson boshqaring.",
+        images: ["/logo.png"],
+    },
+    verification: {
+        google: "xuh_Bj1w4NoxQDiNuuG1yIVzivjk60L0GcwNe0LKVf8",
+    },
 };
 
 const locales = ["uz", "ru", "en"];
