@@ -28,8 +28,14 @@ export default function StocksPage() {
     const router = useRouter();
 
     useEffect(() => {
+        // 1. Ma'lumotni yuklash (argumentlar bilan)
         fetchFullMarket(setStocks, setLoading);
-        const interval = setInterval(fetchFullMarket, 60000);
+
+        // 2. Intervalni to'g'ri o'rnatish
+        const interval = setInterval(() => {
+            fetchFullMarket(setStocks, setLoading);
+        }, 60000);
+
         return () => clearInterval(interval);
     }, []);
 
@@ -44,7 +50,7 @@ export default function StocksPage() {
         setIsAnalysisOpen(true);
     };
 
-    if (loading)
+    if (loading && stocks.length === 0)
         return (
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="flex flex-col items-center gap-4">
@@ -57,7 +63,7 @@ export default function StocksPage() {
         );
 
     return (
-        <main className="min-h-screen bg-background pb-20 pt-10 px-6 max-w-7xl mx-auto">
+        <main className="min-h-screen bg-background pb-20 pt-10 px-4 sm:px-6 max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div className="space-y-2">
                     <Button
@@ -67,10 +73,10 @@ export default function StocksPage() {
                     >
                         <ArrowLeft size={18} /> {t("back")}
                     </Button>
-                    <h1 className="text-5xl font-black tracking-tighter uppercase italic">
+                    <h1 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase italic">
                         U.S. Market <span className="text-primary">Live</span>
                     </h1>
-                    <p className="text-sm font-bold opacity-50 uppercase tracking-widest">
+                    <p className="text-[10px] sm:text-sm font-bold opacity-50 uppercase tracking-widest">
                         {t("subtitle")}
                     </p>
                 </div>
@@ -84,15 +90,16 @@ export default function StocksPage() {
                     />
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredStocks.map((stock, idx) => (
                     <motion.div
                         key={stock.symbol}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="group p-8 rounded-[40px] bg-card/40 backdrop-blur-xl border border-border/50 hover:border-primary/30 transition-all shadow-xl relative overflow-hidden"
+                        whileHover={{ y: -8, scale: 1.01 }}
+                        className="group p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] bg-card/40 backdrop-blur-xl border border-border/50 hover:border-primary/30 transition-all shadow-xl relative overflow-hidden"
                     >
                         <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
                             <Globe size={160} />
@@ -100,25 +107,23 @@ export default function StocksPage() {
 
                         <div className="flex justify-between items-start mb-10">
                             <div className="space-y-1">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-primary/10 text-primary uppercase">
-                                        {t(`sectors.${stock.sector}`)}
-                                    </span>
-                                </div>
-                                <h3 className="text-3xl font-black tracking-tighter leading-none mt-2 uppercase italic">
+                                <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-primary/10 text-primary uppercase">
+                                    {t(`sectors.${stock.sector}`)}
+                                </span>
+                                <h3 className="text-2xl sm:text-3xl font-black tracking-tighter leading-none mt-2 uppercase italic">
                                     {stock.symbol}
                                 </h3>
-                                <p className="text-xs font-bold text-muted-foreground uppercase">
+                                <p className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase truncate max-w-[150px]">
                                     {stock.name}
                                 </p>
                             </div>
                             <div
-                                className={`p-4 rounded-2xl ${stock.up ? "bg-emerald-500/10" : "bg-destructive/10"}`}
+                                className={`p-3 sm:p-4 rounded-2xl ${stock.up ? "bg-emerald-500/10" : "bg-destructive/10"}`}
                             >
                                 {stock.up ? (
-                                    <TrendingUp className="text-emerald-500" />
+                                    <TrendingUp className="text-emerald-500 w-5 h-5 sm:w-6 sm:h-6" />
                                 ) : (
-                                    <TrendingDown className="text-destructive" />
+                                    <TrendingDown className="text-destructive w-5 h-5 sm:w-6 sm:h-6" />
                                 )}
                             </div>
                         </div>
@@ -129,7 +134,7 @@ export default function StocksPage() {
                                     <p className="text-[10px] font-black uppercase opacity-40 tracking-widest">
                                         {t("currentPrice")}
                                     </p>
-                                    <h4 className="text-4xl font-black tabular-nums tracking-tighter">
+                                    <h4 className="text-3xl sm:text-4xl font-black tabular-nums tracking-tighter">
                                         $
                                         {stock.price.toLocaleString(undefined, {
                                             minimumFractionDigits: 2,
@@ -139,7 +144,7 @@ export default function StocksPage() {
                                 <div
                                     className={`text-right ${stock.up ? "text-emerald-500" : "text-destructive"}`}
                                 >
-                                    <p className="text-xl font-black tracking-tighter">
+                                    <p className="text-lg sm:text-xl font-black tracking-tighter">
                                         {stock.up ? "+" : ""}
                                         {stock.percent.toFixed(2)}%
                                     </p>
@@ -178,6 +183,7 @@ export default function StocksPage() {
                     </motion.div>
                 ))}
             </div>
+
             <AnalysisModal
                 symbol={selectedSymbol}
                 isOpen={isAnalysisOpen}

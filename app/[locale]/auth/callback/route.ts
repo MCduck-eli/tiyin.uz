@@ -10,8 +10,8 @@ export async function GET(
     const code = searchParams.get("code");
     const resolvedParams = await params;
     const locale = resolvedParams.locale || "uz";
-
     const next = searchParams.get("next") ?? `/${locale}`;
+    const response = NextResponse.redirect(`${origin}${next}`);
 
     if (code) {
         const cookieStore = await cookies();
@@ -25,16 +25,12 @@ export async function GET(
                         return cookieStore.get(name)?.value;
                     },
                     set(name: string, value: string, options: CookieOptions) {
-                        try {
-                            cookieStore.set({ name, value, ...options });
-                        } catch (error) {}
+                        cookieStore.set({ name, value, ...options });
+                        response.cookies.set({ name, value, ...options });
                     },
                     remove(name: string, options: CookieOptions) {
-                        try {
-                            cookieStore.set({ name, value: "", ...options });
-                        } catch (error) {
-                            //
-                        }
+                        cookieStore.set({ name, value: "", ...options });
+                        response.cookies.set({ name, value: "", ...options });
                     },
                 },
             },
@@ -43,9 +39,8 @@ export async function GET(
         const { error } = await supabase.auth.exchangeCodeForSession(code);
 
         if (!error) {
-            return NextResponse.redirect(`${origin}${next}`);
+            return response;
         }
     }
-
     return NextResponse.redirect(`${origin}/${locale}?error=auth-code-error`);
 }

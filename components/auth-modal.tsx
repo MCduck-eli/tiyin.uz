@@ -8,13 +8,15 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import PasswordStrength from "./password-strength";
+import { useRouter } from "next/navigation";
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -25,6 +27,7 @@ interface AuthModalProps {
 export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
     const t = useTranslations("AuthModal");
     const tNav = useTranslations("Navbar");
+    const router = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -43,13 +46,17 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
     const handleGoogleAuth = async () => {
         setErrorMsg(null);
         setSuccessMsg(null);
-        const { error } = await supabase.auth.signInWithOAuth({
+
+        await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
                 redirectTo: `${window.location.origin}/auth/callback`,
+                queryParams: {
+                    access_type: "offline",
+                    prompt: "consent",
+                },
             },
         });
-        if (error) setErrorMsg(error.message);
     };
 
     const handleAuth = async (e: React.FormEvent) => {
@@ -68,59 +75,66 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
 
         setLoading(true);
 
-        if (view === "forgot") {
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/reset-password`,
-            });
-            if (error) setErrorMsg(error.message);
-            else setSuccessMsg(t("resetSent"));
-        } else if (type === "register") {
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    emailRedirectTo: `${window.location.origin}/auth/callback`,
-                    data: {
-                        full_name: fullName,
+        try {
+            if (view === "forgot") {
+                const { error } = await supabase.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo: `${window.location.origin}/reset-password`,
                     },
-                },
-            });
+                );
+                if (error) setErrorMsg(error.message);
+                else setSuccessMsg(t("resetSent"));
+            } else if (type === "register") {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        emailRedirectTo: `${window.location.origin}/auth/callback`,
+                        data: { full_name: fullName },
+                    },
+                });
 
-            if (error) {
-                setErrorMsg(error.message);
-            } else if (data.user && data.user.identities?.length === 0) {
-                setErrorMsg(t("emailExists"));
+                if (error) {
+                    setErrorMsg(error.message);
+                } else if (data.user && data.user.identities?.length === 0) {
+                    setErrorMsg(t("emailExists"));
+                } else {
+                    setSuccessMsg(t("confirmSent"));
+                }
             } else {
-                setSuccessMsg(t("confirmSent"));
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+
+                if (error) {
+                    setErrorMsg(t("invalidLogin"));
+                } else if (data.session) {
+                    onClose();
+                    router.refresh();
+                }
             }
-        } else {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-            if (error) {
-                setErrorMsg(t("invalidLogin"));
-            } else {
-                window.location.reload();
-            }
+        } catch (err) {
+            setErrorMsg("Server error");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
+    };
+
+    const handleOpenChange = (open: boolean) => {
+        if (!open) {
+            setErrorMsg(null);
+            setSuccessMsg(null);
+            setView("auth");
+            setFullName("");
+            onClose();
+        }
     };
 
     return (
-        <Dialog
-            open={isOpen}
-            onOpenChange={(open) => {
-                if (!open) {
-                    setErrorMsg(null);
-                    setSuccessMsg(null);
-                    setView("auth");
-                    setFullName("");
-                }
-                onClose();
-            }}
-        >
-            <DialogContent className="sm:max-w-100 rounded-[28px] border-border bg-background/80 backdrop-blur-2xl">
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+            <DialogContent className="sm:max-w-[400px] rounded-[28px] border-border bg-background/80 backdrop-blur-2xl">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold tracking-tight text-center">
                         {view === "forgot"
@@ -129,18 +143,21 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                               ? tNav("login")
                               : tNav("getStarted")}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        Authentication required
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4 pt-4">
                     {errorMsg && (
-                        <div className="flex items-center gap-2 p-3 rounded-xl bg-destructive/10 text-destructive text-sm border border-destructive/20 animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-center gap-2 p-3 rounded-xl bg-destructive/10 text-destructive text-sm border border-destructive/20">
                             <AlertCircle className="h-4 w-4" />
                             <p>{errorMsg}</p>
                         </div>
                     )}
 
                     {successMsg && (
-                        <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm border border-emerald-500/20 animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm border border-emerald-500/20">
                             <CheckCircle2 className="h-4 w-4" />
                             <p>{successMsg}</p>
                         </div>
@@ -152,6 +169,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                 <Button
                                     variant="outline"
                                     onClick={handleGoogleAuth}
+                                    type="button"
                                     className="w-full rounded-xl h-11 border-border bg-background/50 hover:bg-muted font-medium flex items-center gap-2"
                                 >
                                     <FcGoogle className="w-5 h-5" />
@@ -165,7 +183,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                         <span className="w-full border-t border-border"></span>
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
-                                        <span className="bg-transparent px-2 text-muted-foreground">
+                                        <span className="bg-background px-2 text-muted-foreground">
                                             {t("or")}
                                         </span>
                                     </div>
@@ -181,7 +199,7 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                         <Input
                                             id="fullName"
                                             type="text"
-                                            placeholder="Eldor Halikov"
+                                            autoComplete="name"
                                             className="rounded-xl bg-muted/50 border-none"
                                             value={fullName}
                                             onChange={(e) =>
@@ -198,8 +216,9 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     <Input
                                         id="email"
                                         type="email"
-                                        placeholder="example@mail.com"
+                                        autoComplete="email"
                                         className="rounded-xl bg-muted/50 border-none"
+                                        value={email}
                                         onChange={(e) =>
                                             setEmail(e.target.value)
                                         }
@@ -225,8 +244,9 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                         <Input
                                             id="password"
                                             type="password"
-                                            placeholder="****"
+                                            autoComplete="current-password"
                                             className="rounded-xl bg-muted/50 border-none"
+                                            value={password}
                                             onChange={(e) =>
                                                 setPassword(e.target.value)
                                             }
@@ -244,13 +264,15 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
                                     className="w-full rounded-xl h-11 font-medium"
                                     disabled={loading}
                                 >
-                                    {loading
-                                        ? "..."
-                                        : view === "forgot"
-                                          ? t("send")
-                                          : type === "login"
-                                            ? t("loginSubmit")
-                                            : t("registerSubmit")}
+                                    {loading ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : view === "forgot" ? (
+                                        t("send")
+                                    ) : type === "login" ? (
+                                        t("loginSubmit")
+                                    ) : (
+                                        t("registerSubmit")
+                                    )}
                                 </Button>
                                 {view === "forgot" && (
                                     <Button

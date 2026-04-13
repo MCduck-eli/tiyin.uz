@@ -38,51 +38,54 @@ export default function Navbar() {
         const segments = pathname.split("/");
         segments[1] = newLocale;
         const newPath = segments.join("/");
-
         router.push(newPath);
     };
 
     useEffect(() => {
-        const getUser = async () => {
-            const { data } = await supabase.auth.getUser();
-            setUser(data.user);
-        };
-        getUser();
-
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, session) => {
-                setUser(session?.user ?? null);
+                if (event === "SIGNED_IN") {
+                    setUser(session?.user ?? null);
+                    router.refresh();
+                } else if (event === "SIGNED_OUT") {
+                    setUser(null);
+                    router.refresh();
+                } else {
+                    setUser(session?.user ?? null);
+                }
             },
         );
 
-        return () => authListener.subscription.unsubscribe();
-    }, []);
+        return () => {
+            authListener.subscription.unsubscribe();
+        };
+    }, [router]);
 
     return (
         <>
-            <nav className="fixed top-4 inset-x-0 z-50 flex justify-center px-6">
-                <div className="flex items-center justify-between w-full max-w-7xl h-14 px-6 bg-background/60 backdrop-blur-xl border border-border rounded-[22px] shadow-sm transition-all duration-300">
+            <nav className="fixed top-2 sm:top-4 inset-x-0 z-50 flex justify-center px-4 sm:px-6">
+                <div className="flex items-center justify-between w-full max-w-7xl h-14 px-4 sm:px-6 bg-background/60 backdrop-blur-xl border border-border rounded-[20px] sm:rounded-[22px] shadow-sm transition-all duration-300">
                     <Link
                         href={`/${currentLocale}`}
-                        className="flex items-center gap-2 group"
+                        className="flex items-center gap-2 group shrink-0"
                     >
                         <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
                             <span className="text-primary-foreground font-bold text-sm">
                                 T
                             </span>
                         </div>
-                        <span className="text-xl font-semibold tracking-tight">
+                        <span className="text-lg sm:text-xl font-semibold tracking-tight">
                             Tiyin
                         </span>
                     </Link>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="rounded-full"
+                                    className="rounded-full w-9 h-9"
                                 >
                                     <Languages className="h-[1.1rem] w-[1.1rem]" />
                                 </Button>
@@ -114,7 +117,7 @@ export default function Navbar() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="rounded-full"
+                            className="rounded-full w-9 h-9"
                             onClick={() =>
                                 setTheme(theme === "dark" ? "light" : "dark")
                             }
@@ -123,26 +126,32 @@ export default function Navbar() {
                             <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                         </Button>
 
-                        <div className="h-4 w-px bg-border mx-1" />
+                        <div className="h-4 w-px bg-border mx-1 hidden xs:block" />
+
                         {user ? (
                             <UserNav user={user} />
                         ) : (
-                            <>
+                            <div className="flex items-center gap-1.5">
                                 <Button
                                     variant="ghost"
-                                    className="hidden sm:flex rounded-full px-5 text-sm font-medium"
+                                    className="hidden md:flex rounded-full px-5 text-sm font-medium"
                                     onClick={() => setAuthType("login")}
                                 >
-                                    {t("login")}{" "}
+                                    {t("login")}
                                 </Button>
 
                                 <Button
-                                    className="rounded-full px-6 bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm font-medium"
+                                    className="rounded-full px-4 sm:px-6 bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-xs sm:text-sm font-medium h-9 sm:h-10"
                                     onClick={() => setAuthType("register")}
                                 >
-                                    {t("getStarted")}
+                                    <span className="hidden xs:inline">
+                                        {t("getStarted")}
+                                    </span>
+                                    <span className="xs:hidden">
+                                        {t("login")}
+                                    </span>
                                 </Button>
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>

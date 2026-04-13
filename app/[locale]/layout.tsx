@@ -79,7 +79,9 @@ export default async function RootLayout({
                     >
                         <ClientWrapper>
                             <Navbar />
-                            <main className="flex-1 pt-24">{children}</main>
+                            <main className="flex-1 pt-20 sm:pt-28">
+                                {children}
+                            </main>
                             <Footer />
                         </ClientWrapper>
                     </ThemeClient>

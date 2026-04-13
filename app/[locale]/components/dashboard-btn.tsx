@@ -21,15 +21,6 @@ export default function DashboardBtn({
 
     return (
         <div className="flex items-end justify-between mb-10 pt-10">
-            <div className="space-y-1">
-                <h2 className="text-4xl font-black tracking-tight text-foreground">
-                    {t("welcome", { name: userName })}
-                </h2>
-                <p className="text-muted-foreground font-medium">
-                    {t("subtitle")}
-                </p>
-            </div>
-
             <div className="flex gap-3">
                 <Button
                     variant="outline"
