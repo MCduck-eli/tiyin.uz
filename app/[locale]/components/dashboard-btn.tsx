@@ -20,30 +20,42 @@ export default function DashboardBtn({
     const t = useTranslations("Dashboard");
 
     return (
-        <div className="flex items-end justify-between mb-10 pt-10">
-            <div className="flex gap-3">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pt-10">
+            <div>
+                <h1 className="text-3xl font-black tracking-tight mb-1">
+                    {t("welcome", { name: userName || "Mehmon" })}
+                </h1>
+                <p className="text-muted-foreground text-sm font-medium">
+                    {t("subtitle")}
+                </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigate.push("/goals")}
-                    className="rounded-full h-12 px-5 font-bold gap-2 hidden sm:flex border-border/50 bg-card/50 hover:bg-accent text-primary"
+                    className="rounded-full h-12 px-5 font-bold gap-2 border-border/50 bg-card/50 hover:bg-accent text-primary transition-all"
                 >
-                    <Target className="w-4 h-4" /> {t("addTarget")}
+                    <Target className="w-4 h-4" />
+                    <span className="hidden lg:inline">{t("addTarget")}</span>
                 </Button>
+
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setIsSetupOpen(true)}
-                    className="rounded-full h-12 px-5 font-bold gap-2 hidden sm:flex border-border/50 bg-card/50 hover:bg-accent"
+                    className="rounded-full h-12 px-5 font-bold gap-2 border-border/50 bg-card/50 hover:bg-accent transition-all"
                 >
-                    <PencilLine className="w-4 h-4 text-primary" />{" "}
-                    {t("editBalance")}
+                    <PencilLine className="w-4 h-4 text-primary" />
+                    <span className="hidden lg:inline">{t("editBalance")}</span>
                 </Button>
+
                 <Button
                     onClick={() => setIsAddOpen(true)}
-                    className="rounded-full h-12 px-6 font-bold gap-2 shadow-lg shadow-primary/20"
+                    className="rounded-full h-12 px-6 font-bold gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
                 >
-                    <Plus className="w-4 h-4" /> {t("addExpense")}
+                    <Plus className="w-5 h-5" />
+                    {t("addExpense")}
                 </Button>
             </div>
         </div>

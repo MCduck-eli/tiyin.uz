@@ -13,8 +13,8 @@ import { TotalExpenseCounter } from "./total-expense-counter";
 import { AICounselor } from "@/components/ai-counselor";
 import { GoalsList } from "@/components/dashboard/goals-list";
 import MaqsadCard from "./maqsad-card";
-import DashboardBtn from "./dashboard-btn";
 import { useTranslations } from "next-intl";
+import DashboardBtn from "./dashboard-btn";
 
 interface DashboardProps {
     initialBalance?: number;
@@ -42,6 +42,32 @@ export default function FirstDashboard({
     const [goals, setGoals] = useState<any[]>([]);
     const [userName, setUserName] = useState("");
     const t = useTranslations("DashboardCard");
+
+    const handleSaveAccount = async (data: {
+        balance: number;
+        currency: string;
+    }) => {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { error } = await supabase
+            .from("profiles")
+            .update({
+                initial_balance: data.balance,
+                currency: data.currency,
+                has_setup: true,
+            })
+            .eq("id", user.id);
+
+        if (error) {
+            console.error("Xatolik:", error.message);
+            return;
+        }
+        await fetchDashboardData();
+        setIsSetupOpen(false);
+    };
 
     const fetchGoals = async () => {
         const {
@@ -223,7 +249,7 @@ export default function FirstDashboard({
             <CreateAccountModal
                 isOpen={isSetupOpen}
                 onClose={() => setIsSetupOpen(false)}
-                onSave={fetchDashboardData}
+                onSave={handleSaveAccount}
             />
             <AddExpenseModal
                 isOpen={isAddOpen}

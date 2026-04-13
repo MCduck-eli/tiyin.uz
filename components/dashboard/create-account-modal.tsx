@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Coins } from "lucide-react";
+import { Check, Coins, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -15,7 +15,7 @@ const CURRENCIES = [
 interface CreateAccountProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: { balance: number; currency: string }) => void;
+    onSave: (data: { balance: number; currency: string }) => Promise<void>;
 }
 
 export function CreateAccountModal({
@@ -25,12 +25,23 @@ export function CreateAccountModal({
 }: CreateAccountProps) {
     const [balance, setBalance] = useState("");
     const [currency, setCurrency] = useState("UZS");
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!balance) return;
-        onSave({ balance: parseFloat(balance), currency });
-        onClose();
+        const numBalance = parseFloat(balance);
+
+        if (isNaN(numBalance) || loading) return;
+
+        setLoading(true);
+        try {
+            await onSave({ balance: numBalance, currency });
+            onClose();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -48,7 +59,6 @@ export function CreateAccountModal({
                         exit={{ scale: 0.95, y: 10 }}
                         className="bg-card border border-border w-full max-w-md rounded-[32px] shadow-2xl p-8 relative overflow-hidden"
                     >
-                        {/* Header qismi - ixchamroq */}
                         <div className="flex flex-col items-center text-center mb-8">
                             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4">
                                 <Coins className="w-7 h-7" />
@@ -62,7 +72,6 @@ export function CreateAccountModal({
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* Valyuta tanlash - zamonaviy tab ko'rinishida */}
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
                                     Valyuta
@@ -72,6 +81,7 @@ export function CreateAccountModal({
                                         <button
                                             key={c.code}
                                             type="button"
+                                            disabled={loading}
                                             onClick={() => setCurrency(c.code)}
                                             className={`py-3 rounded-xl flex items-center justify-center transition-all ${
                                                 currency === c.code
@@ -86,8 +96,6 @@ export function CreateAccountModal({
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Balans kiritish - ixchamroq va aniqroq */}
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
                                     Boshlang'ich mablag'
@@ -96,6 +104,7 @@ export function CreateAccountModal({
                                     <Input
                                         type="number"
                                         placeholder="0"
+                                        disabled={loading}
                                         className="h-16 text-3xl font-black bg-muted/20 border-2 border-transparent focus-visible:border-primary/30 focus-visible:ring-0 rounded-2xl px-6 transition-all placeholder:opacity-20"
                                         value={balance}
                                         onChange={(e) =>
@@ -113,10 +122,18 @@ export function CreateAccountModal({
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Tugma - ixcham va dinamik */}
-                            <Button className="w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30 active:scale-[0.97]">
-                                <Check className="w-5 h-5" /> Saqlash
+                            <Button
+                                type="submit"
+                                disabled={loading || !balance}
+                                className="w-full h-14 rounded-2xl text-base font-bold gap-2 shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30 active:scale-[0.97]"
+                            >
+                                {loading ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <>
+                                        <Check className="w-5 h-5" /> Saqlash
+                                    </>
+                                )}
                             </Button>
                         </form>
                     </motion.div>
