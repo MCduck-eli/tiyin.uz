@@ -224,5 +224,32 @@
     },
     "Common": {
         "loading": "Tizim yuklanmoqda"
+    },
+    "UserNav": {
+        "defaultUser": "Foydalanuvchi",
+        "profile": "Profil",
+        "expenses": "Xarajatlar",
+        "settings": "Sozlamalar",
+        "logout": "Chiqish"
+    },
+    "History": {
+        "back": "Orqaga",
+        "title": "Tarix",
+        "searchPlaceholder": "Qidirish...",
+        "from": "Dan",
+        "to": "Gacha",
+        "totalSpent": "Jami sarf",
+        "count": "Soni",
+        "tableDate": "Sana",
+        "tableCategory": "Kategoriya",
+        "tableNote": "Izoh",
+        "tableAmount": "Summa",
+        "noData": "Topilmadi"
+    },
+    "Profile": {
+        "title": "Mening profilim",
+        "fullNameLabel": "To'liq ism",
+        "emailLabel": "Email manzili",
+        "notSet": "Kiritilmagan"
     }
 }

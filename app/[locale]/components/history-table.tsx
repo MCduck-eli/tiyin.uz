@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslations, useLocale } from "next-intl";
 
 interface HistoryTableProps {
     expenses: any[];
@@ -33,6 +34,10 @@ export function HistoryTable({
     const [endDate, setEndDate] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
+
+    // Tarjima va Lokalizatsiya
+    const t = useTranslations("History");
+    const locale = useLocale();
 
     const filteredExpenses = useMemo(() => {
         const filtered = expenses.filter((exp) => {
@@ -77,13 +82,13 @@ export function HistoryTable({
                         className="group rounded-xl hover:bg-primary/5 transition-all gap-2 h-9"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                        <span className="font-bold text-xs">Orqaga</span>
+                        <span className="font-bold text-xs">{t("back")}</span>
                     </Button>
 
                     <div className="flex items-center gap-1.5 text-muted-foreground bg-muted/30 px-3 py-1 rounded-lg border border-border/40">
                         <CalendarIcon className="w-3 h-3" />
                         <span className="text-[10px] font-black uppercase">
-                            Tarix
+                            {t("title")}
                         </span>
                     </div>
                 </div>
@@ -92,7 +97,7 @@ export function HistoryTable({
                     <div className="relative group">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
                         <Input
-                            placeholder="Qidirish..."
+                            placeholder={t("searchPlaceholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-9 h-10 rounded-xl bg-card text-xs border-border/40"
@@ -102,7 +107,7 @@ export function HistoryTable({
                     <div className="flex items-center gap-2 bg-card border border-border/40 p-1.5 rounded-xl shadow-sm md:col-span-2">
                         <div className="flex-1 flex items-center gap-2 px-2">
                             <span className="text-[9px] font-black uppercase text-muted-foreground">
-                                Dan
+                                {t("from")}
                             </span>
                             <input
                                 type="date"
@@ -110,10 +115,10 @@ export function HistoryTable({
                                 onChange={(e) => setStartDate(e.target.value)}
                             />
                         </div>
-                        <div className="w-[1px] h-4 bg-border/40" />
+                        <div className="w-px h-4 bg-border/40" />
                         <div className="flex-1 flex items-center gap-2 px-2">
                             <span className="text-[9px] font-black uppercase text-muted-foreground">
-                                Gacha
+                                {t("to")}
                             </span>
                             <input
                                 type="date"
@@ -136,7 +141,7 @@ export function HistoryTable({
                         </div>
                         <div>
                             <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-70">
-                                Jami sarf
+                                {t("totalSpent")}
                             </p>
                             <h3 className="text-xl font-black tabular-nums tracking-tighter">
                                 {totalHistoryAmount.toLocaleString()}{" "}
@@ -148,7 +153,7 @@ export function HistoryTable({
                     </div>
                     <div className="bg-muted/40 px-3 py-1.5 rounded-xl border border-border/40 text-right">
                         <p className="text-[8px] font-black uppercase text-muted-foreground">
-                            Soni
+                            {t("count")}
                         </p>
                         <p className="text-sm font-black">
                             {filteredExpenses.length}
@@ -163,16 +168,16 @@ export function HistoryTable({
                         <thead>
                             <tr className="bg-muted/10 border-b border-border/40">
                                 <th className="p-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-                                    Sana
+                                    {t("tableDate")}
                                 </th>
                                 <th className="p-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-                                    Kategoriya
+                                    {t("tableCategory")}
                                 </th>
                                 <th className="p-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-                                    Izoh
+                                    {t("tableNote")}
                                 </th>
                                 <th className="p-4 text-[9px] font-black uppercase tracking-widest text-muted-foreground text-right">
-                                    Summa
+                                    {t("tableAmount")}
                                 </th>
                             </tr>
                         </thead>
@@ -183,24 +188,24 @@ export function HistoryTable({
                                         <td colSpan={4} className="p-10">
                                             <FilterX className="w-8 h-8 mx-auto opacity-10 mb-2" />
                                             <p className="text-[10px] font-bold text-muted-foreground uppercase">
-                                                Topilmadi
+                                                {t("noData")}
                                             </p>
                                         </td>
                                     </tr>
                                 ) : (
-                                    paginatedExpenses.map((exp, idx) => (
+                                    paginatedExpenses.map((exp) => (
                                         <motion.tr
                                             key={exp.id}
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="group hover:bg-primary/[0.01] transition-colors"
+                                            className="group hover:bg-primary/1 transition-colors"
                                         >
                                             <td className="p-4">
                                                 <p className="text-xs font-black tabular-nums">
                                                     {new Date(
                                                         exp.date,
                                                     ).toLocaleDateString(
-                                                        "uz-UZ",
+                                                        locale,
                                                         {
                                                             day: "2-digit",
                                                             month: "2-digit",
@@ -212,7 +217,7 @@ export function HistoryTable({
                                                     {new Date(
                                                         exp.date,
                                                     ).toLocaleDateString(
-                                                        "uz-UZ",
+                                                        locale,
                                                         { weekday: "short" },
                                                     )}
                                                 </p>
@@ -223,7 +228,7 @@ export function HistoryTable({
                                                 </span>
                                             </td>
                                             <td className="p-4">
-                                                <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-[150px]">
+                                                <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-37.5">
                                                     {exp.note || "—"}
                                                 </p>
                                             </td>
@@ -267,33 +272,6 @@ export function HistoryTable({
                             >
                                 <ChevronLeft className="w-3.5 h-3.5" />
                             </Button>
-                            <div className="flex gap-1">
-                                {[...Array(totalPages)].map((_, i) => {
-                                    const pageNum = i + 1;
-                                    if (
-                                        totalPages > 4 &&
-                                        Math.abs(currentPage - pageNum) > 1 &&
-                                        pageNum !== 1 &&
-                                        pageNum !== totalPages
-                                    )
-                                        return null;
-                                    return (
-                                        <button
-                                            key={pageNum}
-                                            onClick={() =>
-                                                setCurrentPage(pageNum)
-                                            }
-                                            className={`h-7 w-7 rounded-lg text-[10px] font-black transition-all ${
-                                                currentPage === pageNum
-                                                    ? "bg-primary text-primary-foreground"
-                                                    : "bg-background border border-border/40"
-                                            }`}
-                                        >
-                                            {pageNum}
-                                        </button>
-                                    );
-                                })}
-                            </div>
                             <Button
                                 variant="outline"
                                 size="icon"

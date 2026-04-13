@@ -14,8 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/lib/supabase";
 import { LogOut, User, Settings, CreditCard } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 
 export function UserNav({ user }: { user: any }) {
+    const t = useTranslations("UserNav");
+    const locale = useLocale();
+
     const handleSignOut = async () => {
         await supabase.auth.signOut();
         window.location.reload();
@@ -49,7 +53,7 @@ export function UserNav({ user }: { user: any }) {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                            {user?.user_metadata?.full_name || "Foydalanuvchi"}
+                            {user?.user_metadata?.full_name || t("defaultUser")}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
                             {user?.email}
@@ -58,22 +62,22 @@ export function UserNav({ user }: { user: any }) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <Link href="/profile">
+                    <Link href={`/${locale}/profile`}>
                         <DropdownMenuItem className="cursor-pointer rounded-lg">
                             <User className="mr-2 h-4 w-4" />
-                            <span>Profil</span>
+                            <span>{t("profile")}</span>
                         </DropdownMenuItem>
                     </Link>
-                    <Link href="/expenses">
+                    <Link href={`/${locale}/expenses`}>
                         <DropdownMenuItem className="cursor-pointer rounded-lg">
                             <CreditCard className="mr-2 h-4 w-4" />
-                            <span>Xarajatlar</span>
+                            <span>{t("expenses")}</span>
                         </DropdownMenuItem>
                     </Link>
-                    <Link href="/settings">
+                    <Link href={`/${locale}/settings`}>
                         <DropdownMenuItem className="cursor-pointer rounded-lg">
                             <Settings className="mr-2 h-4 w-4" />
-                            <span>Sozlamalar</span>
+                            <span>{t("settings")}</span>
                         </DropdownMenuItem>
                     </Link>
                 </DropdownMenuGroup>
@@ -83,7 +87,7 @@ export function UserNav({ user }: { user: any }) {
                     className="cursor-pointer rounded-lg text-destructive focus:text-destructive"
                 >
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Chiqish</span>
+                    <span>{t("logout")}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

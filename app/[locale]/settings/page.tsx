@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useTheme } from "next-themes";
 import { useTranslation } from "@/components/context/language-context";
 import { Language } from "@/lib/dictionary";
@@ -90,7 +89,7 @@ export default function SettingsPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                         align="end"
-                        className="rounded-2xl min-w-[200px] p-2"
+                        className="rounded-2xl min-w-50 p-2"
                     >
                         {languages.map((l) => (
                             <DropdownMenuItem

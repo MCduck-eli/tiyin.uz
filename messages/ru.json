@@ -224,5 +224,32 @@
     },
     "Common": {
         "loading": "Система загружается"
+    },
+    "UserNav": {
+        "defaultUser": "Пользователь",
+        "profile": "Профиль",
+        "expenses": "Расходы",
+        "settings": "Настройки",
+        "logout": "Выйти"
+    },
+    "History": {
+        "back": "Назад",
+        "title": "История",
+        "searchPlaceholder": "Поиск...",
+        "from": "От",
+        "to": "До",
+        "totalSpent": "Всего потрачено",
+        "count": "Количество",
+        "tableDate": "Дата",
+        "tableCategory": "Категория",
+        "tableNote": "Заметка",
+        "tableAmount": "Сумма",
+        "noData": "Не найдено"
+    },
+    "Profile": {
+        "title": "Мой профиль",
+        "fullNameLabel": "Полное имя",
+        "emailLabel": "Электронная почта",
+        "notSet": "Не указано"
     }
 }

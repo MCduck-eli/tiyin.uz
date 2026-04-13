@@ -44,111 +44,100 @@ export default function Navbar() {
     useEffect(() => {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, session) => {
-                if (event === "SIGNED_IN") {
-                    setUser(session?.user ?? null);
+                setUser(session?.user ?? null);
+                if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
                     router.refresh();
-                } else if (event === "SIGNED_OUT") {
-                    setUser(null);
-                    router.refresh();
-                } else {
-                    setUser(session?.user ?? null);
                 }
             },
         );
-
-        return () => {
-            authListener.subscription.unsubscribe();
-        };
+        return () => authListener.subscription.unsubscribe();
     }, [router]);
 
     return (
         <>
             <nav className="fixed top-2 sm:top-4 inset-x-0 z-50 flex justify-center px-4 sm:px-6">
-                <div className="flex items-center justify-between w-full max-w-7xl h-14 px-4 sm:px-6 bg-background/60 backdrop-blur-xl border border-border rounded-[20px] sm:rounded-[22px] shadow-sm transition-all duration-300">
+                <div className="flex items-center justify-between w-full max-w-7xl h-14 px-4 sm:px-6 bg-background/70 backdrop-blur-xl border border-border/50 rounded-full shadow-lg transition-all duration-300">
                     <Link
                         href={`/${currentLocale}`}
                         className="flex items-center gap-2 group shrink-0"
                     >
-                        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
-                            <span className="text-primary-foreground font-bold text-sm">
+                        <div className="w-8 h-8 bg-primary rounded-xl flex items-center justify-center shadow-md shadow-primary/20">
+                            <span className="text-primary-foreground font-black text-sm">
                                 T
                             </span>
                         </div>
-                        <span className="text-lg sm:text-xl font-semibold tracking-tight">
+                        <span className="text-lg font-black tracking-tighter">
                             Tiyin
                         </span>
                     </Link>
 
-                    <div className="flex items-center gap-1 sm:gap-2">
+                    <div className="flex items-center gap-2">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="rounded-full w-9 h-9"
+                                    className="rounded-full"
                                 >
-                                    <Languages className="h-[1.1rem] w-[1.1rem]" />
+                                    <Languages className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 align="end"
-                                className="rounded-xl mt-2 min-w-35"
+                                className="rounded-2xl mt-2 min-w-37.5"
                             >
                                 {languages.map((l) => (
                                     <DropdownMenuItem
                                         key={l.code}
-                                        className="flex items-center justify-between cursor-pointer"
+                                        className="flex items-center justify-between cursor-pointer py-2 px-3 rounded-xl"
                                         onClick={() =>
                                             handleLanguageChange(l.code)
                                         }
                                     >
                                         <span className="flex items-center gap-2">
-                                            <span>{l.flag}</span>
-                                            {l.label}
+                                            <span>{l.flag}</span> {l.label}
                                         </span>
                                         {currentLocale === l.code && (
-                                            <Check className="h-4 w-4 opacity-50" />
+                                            <Check className="h-4 w-4 text-primary" />
                                         )}
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
-
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="rounded-full w-9 h-9"
+                            className="rounded-full"
                             onClick={() =>
                                 setTheme(theme === "dark" ? "light" : "dark")
                             }
                         >
-                            <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                            <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                         </Button>
 
-                        <div className="h-4 w-px bg-border mx-1 hidden xs:block" />
+                        <div className="h-4 w-px bg-border/60 mx-1 hidden xs:block" />
 
                         {user ? (
                             <UserNav user={user} />
                         ) : (
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1 sm:gap-3">
                                 <Button
                                     variant="ghost"
-                                    className="hidden md:flex rounded-full px-5 text-sm font-medium"
+                                    className="rounded-full px-4 text-sm font-bold h-9"
                                     onClick={() => setAuthType("login")}
                                 >
                                     {t("login")}
                                 </Button>
-
                                 <Button
-                                    className="rounded-full px-4 sm:px-6 bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-xs sm:text-sm font-medium h-9 sm:h-10"
+                                    className="rounded-full px-5 bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/20 transition-all active:scale-95 text-sm font-black h-9"
                                     onClick={() => setAuthType("register")}
                                 >
-                                    <span className="hidden xs:inline">
+                                    <span className="hidden sm:inline">
                                         {t("getStarted")}
                                     </span>
-                                    <span className="xs:hidden">
-                                        {t("login")}
+                                    <span className="sm:hidden">
+                                        {t("register")}
                                     </span>
                                 </Button>
                             </div>

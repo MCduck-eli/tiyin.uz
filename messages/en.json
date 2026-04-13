@@ -224,5 +224,32 @@
     },
     "Common": {
         "loading": "System is loading"
+    },
+    "UserNav": {
+        "defaultUser": "User",
+        "profile": "Profile",
+        "expenses": "Expenses",
+        "settings": "Settings",
+        "logout": "Log out"
+    },
+    "History": {
+        "back": "Back",
+        "title": "History",
+        "searchPlaceholder": "Search...",
+        "from": "From",
+        "to": "To",
+        "totalSpent": "Total spent",
+        "count": "Count",
+        "tableDate": "Date",
+        "tableCategory": "Category",
+        "tableNote": "Note",
+        "tableAmount": "Amount",
+        "noData": "No data found"
+    },
+    "Profile": {
+        "title": "My Profile",
+        "fullNameLabel": "Full Name",
+        "emailLabel": "Email Address",
+        "notSet": "Not provided"
     }
 }
