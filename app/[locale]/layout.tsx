@@ -9,6 +9,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
+    metadataBase: new URL("https://tiyin.uz"),
     title: "Tiyin.uz - O'zbekistondagi moliya va hisob-kitob platformasi",
     description:
         "Tiyin.uz orqali pullaringizni hisoblang, valyuta kurslarini kuzating va moliyaviy savodxonligingizni oshiring.",

@@ -43,7 +43,7 @@ export default function GoalsPage() {
                 .from("profiles")
                 .select("currency")
                 .eq("id", user.id)
-                .single();
+                .maybeSingle();
             const { data: expData } = await supabase
                 .from("expenses")
                 .select("*")

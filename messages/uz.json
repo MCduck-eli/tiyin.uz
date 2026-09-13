@@ -7,7 +7,8 @@
         "dashboard": "Boshqaruv paneli",
         "login": "Kirish",
         "logout": "Chiqish",
-        "getStarted": "Ro'yxatdan o'tish"
+        "getStarted": "Ro'yxatdan o'tish",
+        "register": "Ro'yxatdan o'tish"
     },
     "AuthModal": {
         "forgotTitle": "Parolni tiklash",

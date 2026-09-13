@@ -35,7 +35,7 @@ async function get_financial_summary(supabase: any) {
             .from("profiles")
             .select("initial_balance, full_name")
             .eq("id", user.id)
-            .single();
+            .maybeSingle();
 
         const initialBalance = profile?.initial_balance || 0;
         const totalSpent = (expenses || []).reduce(
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
                 .from("profiles")
                 .select("full_name")
                 .eq("id", user.id)
-                .single();
+                .maybeSingle();
             userContext = `Foydalanuvchi: ${profile?.full_name || user.email}. Holati: Tizimda.`;
         }
 
@@ -111,16 +111,24 @@ export async function POST(req: Request) {
             { role: "user", content: message },
         ];
 
+        if (!apiKey) {
+            console.error("GROQ_API_KEY is not defined in environment variables");
+            return NextResponse.json(
+                { reply: "AI xizmati uchun API kalit (.env) kiritilmagan." },
+                { status: 500 },
+            );
+        }
+
         let response = await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
             {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${apiKey}`,
+                    Authorization: `Bearer ${apiKey.trim()}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
+                    model: "openai/gpt-oss-120b",
                     messages: initialMessages,
                     tools: [
                         {
@@ -139,20 +147,29 @@ export async function POST(req: Request) {
         );
 
         const data = await response.json();
+
+        if (!response.ok || !data.choices || !data.choices[0]) {
+            console.error("Groq API Error Response:", data);
+            return NextResponse.json(
+                { reply: data?.error?.message || "AI xizmatidan noto'g'ri javob keldi." },
+                { status: 500 },
+            );
+        }
+
         const msg = data.choices[0].message;
 
-        if (msg.tool_calls) {
+        if (msg.tool_calls && msg.tool_calls.length > 0) {
             const financialData = await get_financial_summary(supabase);
             const secondRes = await fetch(
                 "https://api.groq.com/openai/v1/chat/completions",
                 {
                     method: "POST",
                     headers: {
-                        Authorization: `Bearer ${apiKey}`,
+                        Authorization: `Bearer ${apiKey.trim()}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
+                        model: "openai/gpt-oss-120b",
                         messages: [
                             ...initialMessages,
                             msg,
@@ -169,14 +186,15 @@ export async function POST(req: Request) {
             );
             const secondData = await secondRes.json();
             return NextResponse.json({
-                reply: secondData.choices[0].message.content,
+                reply: secondData.choices?.[0]?.message?.content || msg.content || "Ma'lumotlar qayta ishlandi.",
             });
         }
 
         return NextResponse.json({ reply: msg.content });
-    } catch {
+    } catch (err: any) {
+        console.error("AI Route Exception:", err);
         return NextResponse.json(
-            { reply: "Tizimda texnik xatolik. @e_halikov bilan bog'laning." },
+            { reply: err?.message || "Tizimda texnik xatolik. @e_halikov bilan bog'laning." },
             { status: 500 },
         );
     }

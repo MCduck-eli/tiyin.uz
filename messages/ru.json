@@ -7,7 +7,8 @@
         "dashboard": "Панель управления",
         "login": "Войти",
         "logout": "Выйти",
-        "getStarted": "Начать"
+        "getStarted": "Начать",
+        "register": "Регистрация"
     },
     "AuthModal": {
         "forgotTitle": "Восстановление пароля",

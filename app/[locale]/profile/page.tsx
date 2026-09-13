@@ -22,8 +22,8 @@ export default function ProfilePage() {
                     .from("profiles")
                     .select("*")
                     .eq("id", user.id)
-                    .single();
-                setProfile({ ...data, email: user.email });
+                    .maybeSingle();
+                setProfile({ ...(data || {}), email: user.email, full_name: data?.full_name || user.user_metadata?.full_name || "" });
             }
             setLoading(false);
         };

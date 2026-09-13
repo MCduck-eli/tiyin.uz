@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
     AreaChart,
     Area,
@@ -18,6 +19,11 @@ interface ExpenseChartProps {
 
 export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
     const t = useTranslations("ExpenseChart");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <div className="md:col-span-2 h-112.5 rounded-[48px] bg-card/30 dark:bg-neutral-900/50 border border-border dark:border-white/10 p-10 shadow-2xl flex flex-col relative overflow-hidden group backdrop-blur-xl">
@@ -35,12 +41,13 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                 </div>
             </div>
 
-            <div className="flex-1 w-full h-full min-h-0 relative z-10">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                        data={data}
-                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                    >
+            <div className="flex-1 w-full h-full min-h-[220px] min-w-0 relative z-10">
+                {mounted && (
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
+                        <AreaChart
+                            data={data}
+                            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                        >
                         <defs>
                             <linearGradient
                                 id="colorAmt"
@@ -131,6 +138,7 @@ export const ExpenseChart = ({ data, currencySymbol }: ExpenseChartProps) => {
                         />
                     </AreaChart>
                 </ResponsiveContainer>
+                )}
             </div>
         </div>
     );

@@ -54,12 +54,13 @@ export default function FirstDashboard({
 
         const { error } = await supabase
             .from("profiles")
-            .update({
+            .upsert({
+                id: user.id,
+                full_name: user.user_metadata?.full_name || "",
                 initial_balance: data.balance,
                 currency: data.currency,
                 has_setup: true,
-            })
-            .eq("id", user.id);
+            });
 
         if (error) {
             console.error("Xatolik:", error.message);
@@ -94,16 +95,17 @@ export default function FirstDashboard({
             .from("profiles")
             .select("*")
             .eq("id", user.id)
-            .single();
+            .maybeSingle();
 
         if (profile) {
             setUserStats({
                 balance: profile.initial_balance,
                 currency: profile.currency,
             });
-            setUserName(profile.full_name || "");
+            setUserName(profile.full_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "");
             if (!profile.has_setup) setIsSetupOpen(true);
         } else {
+            setUserName(user.user_metadata?.full_name || user.email?.split("@")[0] || "");
             setIsSetupOpen(true);
         }
 
