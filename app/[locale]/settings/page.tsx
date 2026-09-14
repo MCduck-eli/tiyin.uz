@@ -1,8 +1,8 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useTranslation } from "@/components/context/language-context";
-import { Language } from "@/lib/dictionary";
+import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
 import {
     Moon,
     Sun,
@@ -26,7 +26,17 @@ const languages = [
 
 export default function SettingsPage() {
     const { setTheme, theme } = useTheme();
-    const { lang, setLang } = useTranslation();
+    const router = useRouter();
+    const pathname = usePathname();
+    const currentLocale = useLocale();
+
+    const handleLanguageChange = (newLocale: string) => {
+        if (newLocale === currentLocale) return;
+        const segments = pathname.split("/");
+        segments[1] = newLocale;
+        const newPath = segments.join("/");
+        router.push(newPath);
+    };
 
     return (
         <main className="max-w-2xl mx-auto pt-20 px-6 pb-20">
@@ -78,7 +88,7 @@ export default function SettingsPage() {
                                         Tanlangan:{" "}
                                         {
                                             languages.find(
-                                                (l) => l.code === lang,
+                                                (l) => l.code === currentLocale,
                                             )?.label
                                         }
                                     </p>
@@ -95,7 +105,7 @@ export default function SettingsPage() {
                             <DropdownMenuItem
                                 key={l.code}
                                 className="flex items-center justify-between p-3 cursor-pointer rounded-xl"
-                                onClick={() => setLang(l.code as Language)}
+                                onClick={() => handleLanguageChange(l.code)}
                             >
                                 <span className="flex items-center gap-3">
                                     <span className="text-xl">{l.flag}</span>
@@ -103,7 +113,7 @@ export default function SettingsPage() {
                                         {l.label}
                                     </span>
                                 </span>
-                                {lang === l.code && (
+                                {currentLocale === l.code && (
                                     <Check size={18} className="text-primary" />
                                 )}
                             </DropdownMenuItem>

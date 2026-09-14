@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Loader } from "@/components/ui/loader";
 import { User, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { SalarySettingsForm } from "@/components/profile/SalarySettingsForm";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
@@ -23,7 +24,12 @@ export default function ProfilePage() {
                     .select("*")
                     .eq("id", user.id)
                     .maybeSingle();
-                setProfile({ ...(data || {}), email: user.email, full_name: data?.full_name || user.user_metadata?.full_name || "" });
+                setProfile({
+                    ...(data || {}),
+                    email: user.email,
+                    full_name:
+                        data?.full_name || user.user_metadata?.full_name || "",
+                });
             }
             setLoading(false);
         };
@@ -33,8 +39,8 @@ export default function ProfilePage() {
     if (loading) return <Loader />;
 
     return (
-        <main className="max-w-2xl mx-auto pt-24 pb-12 px-6">
-            <h1 className="text-3xl font-black mb-8 tracking-tighter">
+        <main className="max-w-2xl mx-auto pt-24 pb-12 px-6 space-y-8">
+            <h1 className="text-3xl font-black tracking-tighter">
                 {t("title")}
             </h1>
 
@@ -66,6 +72,16 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
+
+            <SalarySettingsForm
+                initialSalaryDay={profile?.salary_day}
+                onSaved={(salaryDay) => {
+                    setProfile((prev: any) => ({
+                        ...(prev || {}),
+                        salary_day: salaryDay,
+                    }));
+                }}
+            />
         </main>
     );
 }

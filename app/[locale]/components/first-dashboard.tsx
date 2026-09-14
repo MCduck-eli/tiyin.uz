@@ -4,6 +4,8 @@ import { Calendar, TrendingUp, Wallet, Zap } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { AddExpenseModal } from "@/components/dashboard/add-expense-modal";
 import { CreateAccountModal } from "@/components/dashboard/create-account-modal";
+import { SalaryNotificationModal } from "@/components/SalaryNotificationModal";
+import { SalaryDayCard } from "@/components/dashboard/salary-day-card";
 import { supabase } from "@/lib/supabase";
 import { CategoryPreview } from "@/components/dashboard/category-preview";
 import DashboardCard from "./dashboard-card";
@@ -34,19 +36,17 @@ export default function FirstDashboard({
     const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
     const [view, setView] = useState<"dashboard" | "history">("dashboard");
+    const [salaryDay, setSalaryDay] = useState<number | null>(null);
     const [userStats, setUserStats] = useState({
         balance: propInitialBalance,
         currency: propCurrency,
     });
     const [localExpenses, setLocalExpenses] = useState<any[]>(propExpenses);
     const [goals, setGoals] = useState<any[]>([]);
-    const [userName, setUserName] = useState("");
+    const [userName, setUserName] = useState<string>("");
     const t = useTranslations("DashboardCard");
 
-    const handleSaveAccount = async (data: {
-        balance: number;
-        currency: string;
-    }) => {
+    const handleSaveAccount = async (data: any) => {
         const {
             data: { user },
         } = await supabase.auth.getUser();
@@ -103,9 +103,11 @@ export default function FirstDashboard({
                 currency: profile.currency,
             });
             setUserName(profile.full_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "");
+            setSalaryDay(profile.salary_day ? Number(profile.salary_day) : null);
             if (!profile.has_setup) setIsSetupOpen(true);
         } else {
             setUserName(user.user_metadata?.full_name || user.email?.split("@")[0] || "");
+            setSalaryDay(null);
             setIsSetupOpen(true);
         }
 
@@ -248,6 +250,7 @@ export default function FirstDashboard({
     return (
         <main className="flex min-h-screen flex-col px-6 max-w-7xl mx-auto w-full text-foreground bg-background">
             <AICounselor />
+            <SalaryNotificationModal />
             <CreateAccountModal
                 isOpen={isSetupOpen}
                 onClose={() => setIsSetupOpen(false)}
@@ -271,6 +274,11 @@ export default function FirstDashboard({
                     currencySymbol={getCurrencySymbol(userStats.currency)}
                 />
             </div>
+
+            <SalaryDayCard
+                salaryDay={salaryDay}
+                onUpdate={(newDay) => setSalaryDay(newDay)}
+            />
 
             <div className="mb-8">
                 <DashboardCard

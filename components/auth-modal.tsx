@@ -47,10 +47,15 @@ export default function AuthModal({ isOpen, onClose, type }: AuthModalProps) {
         setErrorMsg(null);
         setSuccessMsg(null);
 
+        const redirectUrl =
+            typeof window !== "undefined"
+                ? `${window.location.origin}/auth/callback`
+                : "/auth/callback";
+
         await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`,
+                redirectTo: redirectUrl,
                 queryParams: {
                     access_type: "offline",
                     prompt: "consent",
