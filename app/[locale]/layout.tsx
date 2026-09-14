@@ -10,23 +10,26 @@ import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://tiyin.uz"),
-    title: "Tiyin.uz - O'zbekistondagi moliya va hisob-kitob platformasi",
+    title: "Tiyin.uz - O'zbekistondagi moliya va hisob-kitob platformasi | by Halikov",
     description:
-        "Tiyin.uz orqali pullaringizni hisoblang, valyuta kurslarini kuzating va moliyaviy savodxonligingizni oshiring.",
+        "Tiyin.uz orqali pullaringizni hisoblang, valyuta kurslarini kuzating va moliyaviy savodxonligingizni oshiring. Loyiha Halikov tomonidan ishlab chiqilgan.",
     keywords: [
         "moliya",
         "pul hisoblash",
         "tiyin uz",
         "valyuta kursi",
         "o'zbekiston moliya",
+        "halikov",
+        "tiyin uz halikov",
     ],
     icons: {
-        icon: "/icon.png",
-        apple: "/icon.png",
+        icon: "/logo.png",
+        apple: "/logo.png",
     },
     openGraph: {
-        title: "Tiyin.uz - Aqlli moliya boshqaruvi",
-        description: "Shaxsiy mablag'laringizni biz bilan oson boshqaring.",
+        title: "Tiyin.uz - Aqlli moliya boshqaruvi by Halikov",
+        description:
+            "Shaxsiy mablag'laringizni biz bilan oson boshqaring. Loyiha Halikov tomonidan yaratilgan.",
         url: "https://tiyin-uz.vercel.app",
         siteName: "Tiyin uz",
         images: [
@@ -42,15 +45,15 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Tiyin.uz - Aqlli moliya boshqaruvi",
-        description: "Mablag'laringizni biz bilan oson boshqaring.",
+        title: "Tiyin.uz - Aqlli moliya boshqaruvi by Halikov",
+        description:
+            "Mablag'laringizni biz bilan oson boshqaring. Loyiha Halikov tomonidan yaratilgan.",
         images: ["/logo.png"],
     },
     verification: {
         google: "xuh_Bj1w4NoxQDiNuuG1yIVzivjk60L0GcwNe0LKVf8",
     },
 };
-
 const locales = ["uz", "ru", "en"];
 
 export default async function RootLayout({
