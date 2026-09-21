@@ -37,6 +37,7 @@ export default function FirstDashboard({
     const [isMounted, setIsMounted] = useState(false);
     const [view, setView] = useState<"dashboard" | "history">("dashboard");
     const [salaryDay, setSalaryDay] = useState<number | null>(null);
+    const [salaryStartDate, setSalaryStartDate] = useState<string | null>(null);
     const [userStats, setUserStats] = useState({
         balance: propInitialBalance,
         currency: propCurrency,
@@ -91,23 +92,37 @@ export default function FirstDashboard({
             return;
         }
 
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        try {
+            await supabase
+                .from("expenses")
+                .delete()
+                .eq("user_id", user.id)
+                .lt("date", sixMonthsAgo.toISOString());
+        } catch {}
+
         const { data: profile } = await supabase
             .from("profiles")
             .select("*")
             .eq("id", user.id)
             .maybeSingle();
 
+        const localSavedDate = typeof window !== "undefined" ? localStorage.getItem(`salary_start_date_${user.id}`) : null;
+
         if (profile) {
             setUserStats({
-                balance: profile.initial_balance,
-                currency: profile.currency,
+                balance: Number(profile.initial_balance) || 0,
+                currency: profile.currency || "UZS",
             });
             setUserName(profile.full_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "");
             setSalaryDay(profile.salary_day ? Number(profile.salary_day) : null);
+            setSalaryStartDate(profile.salary_start_date || localSavedDate || null);
             if (!profile.has_setup) setIsSetupOpen(true);
         } else {
             setUserName(user.user_metadata?.full_name || user.email?.split("@")[0] || "");
             setSalaryDay(null);
+            setSalaryStartDate(localSavedDate || null);
             setIsSetupOpen(true);
         }
 
@@ -163,6 +178,21 @@ export default function FirstDashboard({
         }
     };
 
+    const currentCycleExpenses = useMemo(() => {
+        if (!salaryStartDate) {
+            const now = new Date();
+            return localExpenses.filter((e) => {
+                const d = new Date(e.date);
+                return (
+                    d.getMonth() === now.getMonth() &&
+                    d.getFullYear() === now.getFullYear()
+                );
+            });
+        }
+        const startTime = new Date(salaryStartDate).getTime();
+        return localExpenses.filter((e) => new Date(e.date).getTime() >= startTime);
+    }, [localExpenses, salaryStartDate]);
+
     const chartData = useMemo(() => {
         const now = new Date();
         const daysInMonth = new Date(
@@ -177,28 +207,19 @@ export default function FirstDashboard({
                 .split("T")[0],
             amount: 0,
         }));
-        localExpenses.forEach((exp) => {
+        currentCycleExpenses.forEach((exp) => {
             const expDate = new Date(exp.date).toISOString().split("T")[0];
             const dayEntry = days.find((d) => d.fullDate === expDate);
-            if (dayEntry) dayEntry.amount += exp.amount;
+            if (dayEntry) dayEntry.amount += Number(exp.amount) || 0;
         });
         return days;
-    }, [localExpenses]);
+    }, [currentCycleExpenses]);
 
     const monthlyTotal = useMemo(() => {
-        const now = new Date();
-        return localExpenses
-            .filter((e) => {
-                const d = new Date(e.date);
-                return (
-                    d.getMonth() === now.getMonth() &&
-                    d.getFullYear() === now.getFullYear()
-                );
-            })
-            .reduce((sum, item) => sum + item.amount, 0);
-    }, [localExpenses]);
+        return currentCycleExpenses.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    }, [currentCycleExpenses]);
 
-    const currentBalance = userStats.balance - monthlyTotal;
+    const currentBalance = Math.max(0, userStats.balance - monthlyTotal);
     const budgetLeft =
         monthlyLimit > 0 ? Math.max(0, monthlyLimit - monthlyTotal) : 0;
     const budgetPercent =
@@ -250,7 +271,12 @@ export default function FirstDashboard({
     return (
         <main className="flex min-h-screen flex-col px-6 max-w-7xl mx-auto w-full text-foreground bg-background">
             <AICounselor />
-            <SalaryNotificationModal />
+            <SalaryNotificationModal
+                salaryDay={salaryDay}
+                currentBalance={currentBalance}
+                currencySymbol={getCurrencySymbol(userStats.currency)}
+                onSuccess={fetchDashboardData}
+            />
             <CreateAccountModal
                 isOpen={isSetupOpen}
                 onClose={() => setIsSetupOpen(false)}
@@ -270,7 +296,7 @@ export default function FirstDashboard({
 
             <div className="mb-6">
                 <TotalExpenseCounter
-                    expenses={localExpenses}
+                    expenses={currentCycleExpenses}
                     currencySymbol={getCurrencySymbol(userStats.currency)}
                 />
             </div>
@@ -296,7 +322,7 @@ export default function FirstDashboard({
                 <div className="flex flex-col gap-6">
                     <CategoryPreview
                         totalBalance={userStats.balance}
-                        expenses={localExpenses}
+                        expenses={currentCycleExpenses}
                         currencySymbol={getCurrencySymbol(userStats.currency)}
                     />
                     <AllCost

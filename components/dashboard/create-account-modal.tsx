@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Coins, Loader2 } from "lucide-react";
+import { Check, Coins, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -51,14 +51,24 @@ export function CreateAccountModal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    onClick={onClose}
                     className="fixed inset-0 z-[150] bg-background/60 backdrop-blur-xl flex items-center justify-center p-4"
                 >
                     <motion.div
                         initial={{ scale: 0.95, y: 10 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.95, y: 10 }}
+                        onClick={(e) => e.stopPropagation()}
                         className="bg-card border border-border w-full max-w-md rounded-[32px] shadow-2xl p-8 relative overflow-hidden"
                     >
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="absolute top-6 right-6 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+
                         <div className="flex flex-col items-center text-center mb-8">
                             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4">
                                 <Coins className="w-7 h-7" />

@@ -17,33 +17,11 @@ export function TotalExpenseCounter({
     const t = useTranslations("DashboardMessage.ExpenseCounter");
 
     const monthlyTotalSpent = useMemo(() => {
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-
-        return expenses
-            .filter((exp) => {
-                const expDate = new Date(exp.date);
-                return (
-                    expDate.getMonth() === currentMonth &&
-                    expDate.getFullYear() === currentYear
-                );
-            })
-            .reduce((sum, item) => sum + item.amount, 0);
+        return expenses.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
     }, [expenses]);
 
     const monthlyCount = useMemo(() => {
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-
-        return expenses.filter((exp) => {
-            const expDate = new Date(exp.date);
-            return (
-                expDate.getMonth() === currentMonth &&
-                expDate.getFullYear() === currentYear
-            );
-        }).length;
+        return expenses.length;
     }, [expenses]);
 
     return (

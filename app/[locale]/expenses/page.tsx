@@ -15,6 +15,16 @@ export default function ExpensesPage() {
                 data: { user },
             } = await supabase.auth.getUser();
             if (user) {
+                const sixMonthsAgo = new Date();
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                try {
+                    await supabase
+                        .from("expenses")
+                        .delete()
+                        .eq("user_id", user.id)
+                        .lt("date", sixMonthsAgo.toISOString());
+                } catch {}
+
                 const { data } = await supabase
                     .from("expenses")
                     .select("*")
